@@ -16,7 +16,7 @@ const orbitron = Orbitron({
 });
 
 export const metadata: Metadata = {
-  title: 'Darwic | Evolution, Accelerated',
+  title: 'Darwic | Evolution Accelerated',
   description: 'We take the reins of evolution where nature stops. A new era of engineered biology begins here.',
   generator: 'v0.app',
   icons: {
@@ -30,8 +30,8 @@ export const metadata: Metadata = {
         media: '(prefers-color-scheme: dark)',
       },
       {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
+        url: '/icon.png',
+        type: 'image/png',
       },
     ],
     apple: '/apple-icon.png',

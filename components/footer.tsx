@@ -7,13 +7,15 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <Link href="/" className="flex items-center">
-            <Image
-              src="/images/logo-darwic.png"
-              alt="Darwic Logo"
-              width={120}
-              height={35}
-              className="h-8 w-auto"
-            />
+            <div className="relative h-8 w-[120px]">
+              <Image
+                src="/images/logo-darwic.png"
+                alt="Darwic Logo"
+                fill
+                sizes="120px"
+                className="object-contain object-left"
+              />
+            </div>
           </Link>
           
           <nav className="flex items-center gap-8" aria-label="Footer navigation">

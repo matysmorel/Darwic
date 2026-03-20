@@ -40,14 +40,14 @@ export function HeroSection() {
           {/* Animated slogan with mask reveal effect */}
           <h1 className="font-[var(--font-orbitron)] text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#091511] mb-6 tracking-tight text-balance relative overflow-hidden">
             <span 
-              className="inline-block transition-all duration-1000 ease-out"
+              className="inline-block transition-all duration-1000 ease-out mr-3 sm:mr-4 md:mr-5"
               style={{
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? 'translateY(0)' : 'translateY(100%)',
                 transitionDelay: '200ms',
               }}
             >
-              Evolution{" "}
+              Evolution
             </span>
             <span 
               className="inline-block bg-clip-text text-transparent relative"

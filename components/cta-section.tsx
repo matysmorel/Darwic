@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Mail, Phone, User } from "lucide-react"
+import { Mail, Linkedin, User } from "lucide-react"
 
 interface CTASectionProps {
   onNewsletterClick: () => void
@@ -69,11 +69,13 @@ export function CTASection({ onNewsletterClick }: CTASectionProps) {
               <span>michael@darwic.com</span>
             </a>
             <a 
-              href="tel:+420601121474"
+              href="https://www.linkedin.com/in/michael-rytir/"
               className="flex items-center gap-3 text-white/70 hover:text-[#64B557] transition-colors"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <Phone className="w-5 h-5" aria-hidden="true" />
-              <span>+420 601 121 474</span>
+              <Linkedin className="w-5 h-5" aria-hidden="true" />
+              <span>LinkedIn</span>
             </a>
           </div>
         </div>

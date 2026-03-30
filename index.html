@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Darwic | Evolution Accelerated</title>
+  <meta name="description" content="We take the reins of evolution where nature stops. A new era of engineered biology begins here." />
+  <!-- Favicons & App Icons -->
+  <link rel="icon" href="public/favicon.ico" sizes="16x16 32x32" />
+  <link rel="icon" href="public/icon-dark-32x32.png" type="image/png" sizes="32x32" media="(prefers-color-scheme: light)" />
+  <link rel="icon" href="public/icon-dark-32x32.png" type="image/png" sizes="32x32" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="public/icon-dark-192x192.png" type="image/png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="public/apple-icon.png" sizes="180x180" />
+  <meta name="theme-color" content="#ffffff" />
+  <!-- Google Fonts — works online; system-font fallbacks work offline -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600;8..144,700&display=swap&subset=latin,latin-ext" rel="stylesheet" />
+  <style>
+    /* ─── CZECH DIACRITIC FONT OVERRIDE ──────────────────────────────── */
+    /*
+      Orbitron lacks Latin Extended-A glyphs (č,š,ž,ř,ě,ů…).
+      We override 'Orbitron' for that unicode range with Exo 2,
+      a geometrically compatible font that has full Czech support.
+      The browser uses Exo 2 only for those characters; everything else
+      still comes from the real Orbitron file.
+    */
+    @font-face {
+      font-family: 'Orbitron';
+      src: url(https://fonts.gstatic.com/s/exo2/v26/7cH1v4okm5zmbvwkAx_sfcEuiD8jvvKcPg.ttf) format('truetype');
+      font-weight: 400;
+      font-display: swap;
+      unicode-range: U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0100-017F;
+    }
+    @font-face {
+      font-family: 'Orbitron';
+      src: url(https://fonts.gstatic.com/s/exo2/v26/7cH1v4okm5zmbvwkAx_sfcEuiD8jYPWcPg.ttf) format('truetype');
+      font-weight: 600;
+      font-display: swap;
+      unicode-range: U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0100-017F;
+    }
+    @font-face {
+      font-family: 'Orbitron';
+      src: url(https://fonts.gstatic.com/s/exo2/v26/7cH1v4okm5zmbvwkAx_sfcEuiD8jWfWcPg.ttf) format('truetype');
+      font-weight: 700;
+      font-display: swap;
+      unicode-range: U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0100-017F;
+    }
+    @font-face {
+      font-family: 'Orbitron';
+      src: url(https://fonts.gstatic.com/s/exo2/v26/7cH1v4okm5zmbvwkAx_sfcEuiD8jPvWcPg.ttf) format('truetype');
+      font-weight: 800;
+      font-display: swap;
+      unicode-range: U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0100-017F;
+    }
+    @font-face {
+      font-family: 'Orbitron';
+      src: url(https://fonts.gstatic.com/s/exo2/v26/7cH1v4okm5zmbvwkAx_sfcEuiD8jF_WcPg.ttf) format('truetype');
+      font-weight: 900;
+      font-display: swap;
+      unicode-range: U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0100-017F;
+    }
+
+    /* ─── TOKENS ──────────────────────────────────────────────────────── */
+    :root {
+      --green:       #64B557;
+      --green-mid:   #4d9442;
+      --green-dim:   rgba(100,181,87,.12);
+      --dark:        #091511;
+      --dark-2:      #0d1e18;
+      --dark-3:      #1a2f28;
+      --light:       #F8F8F8;
+      --white:       #ffffff;
+      --muted:       #4a5568;
+      --border:      #e2e8f0;
+      --font-h:      'Orbitron', system-ui, -apple-system, sans-serif;
+      --font-b:      'Roboto Flex', system-ui, -apple-system, sans-serif;
+      --ease-out:    cubic-bezier(.22,1,.36,1);
+    }
+
+    /* ─── RESET ───────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html  { scroll-behavior: smooth; }
+    body  {
+      font-family: var(--font-b);
+      background: var(--white);
+      color: var(--dark);
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img  { display: block; max-width: 100%; }
+    a    { text-decoration: none; color: inherit; }
+    button { font-family: inherit; }
+
+    /* ─── LAYOUT ──────────────────────────────────────────────────────── */
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+    @media (min-width: 640px)  { .wrap { padding: 0 2rem; } }
+    @media (min-width: 1024px) { .wrap { padding: 0 3rem; } }
+
+    /* ─── KEYFRAMES ───────────────────────────────────────────────────── */
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(1.75rem); } to { opacity:1; transform:none; } }
+    @keyframes fadeIn   { from { opacity:0; }                               to { opacity:1; } }
+    @keyframes lineGrow { from { width:0; opacity:0; }                      to { width:12rem; opacity:1; } }
+    @keyframes bob      { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    @keyframes float1   { 0%,100%{transform:translate(0,0) scale(1)} 40%{transform:translate(22px,-18px) scale(1.05)} 75%{transform:translate(-12px,10px) scale(.97)} }
+    @keyframes float2   { 0%,100%{transform:translate(0,0)} 35%{transform:translate(-20px,14px)} 70%{transform:translate(14px,-9px)} }
+    @keyframes scanLine { 0%{top:0;opacity:0} 4%{opacity:1} 96%{opacity:1} 100%{top:100%;opacity:0} }
+    @keyframes nodePulse{ 0%,100%{r:var(--r)} 50%{r:calc(var(--r)*1.25)} }
+    @keyframes rotSlow  { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    @keyframes ringPop  { 0%{transform:scale(.95);opacity:.7} 70%{transform:scale(1.2);opacity:0} 100%{opacity:0} }
+
+    /* ─── SCROLL REVEAL ───────────────────────────────────────────────── */
+    .rv         { opacity:0; transform:translateY(2rem); transition:opacity .75s var(--ease-out), transform .75s var(--ease-out); }
+    .rv-l       { opacity:0; transform:translateX(-2rem); transition:opacity .75s var(--ease-out), transform .75s var(--ease-out); }
+    .rv-r       { opacity:0; transform:translateX(2rem);  transition:opacity .75s var(--ease-out), transform .75s var(--ease-out); }
+    .rv-s       { opacity:0; transform:scale(.93);        transition:opacity .65s var(--ease-out), transform .65s var(--ease-out); }
+    .rv.on, .rv-l.on, .rv-r.on, .rv-s.on { opacity:1; transform:none; }
+    .d1 { transition-delay:.1s } .d2 { transition-delay:.2s }
+    .d3 { transition-delay:.3s } .d4 { transition-delay:.4s }
+    .d5 { transition-delay:.5s }
+
+    /* ─── HEADER ──────────────────────────────────────────────────────── */
+    .hdr {
+      position: fixed; inset: 0 0 auto;
+      z-index: 100;
+      background: rgba(255,255,255,.8);
+      backdrop-filter: blur(14px) saturate(180%);
+      -webkit-backdrop-filter: blur(14px) saturate(180%);
+      border-bottom: 1px solid rgba(226,232,240,.5);
+      transition: background .3s, box-shadow .3s;
+    }
+    .hdr.scrolled { background:rgba(255,255,255,.96); box-shadow:0 2px 24px rgba(9,21,17,.08); }
+    .hdr__row { display:flex; align-items:center; justify-content:space-between; height:4.5rem; }
+    .hdr__logo img { height: 2.4rem; width: auto; }
+
+    .hdr__nav { display:none; align-items:center; gap:2.5rem; }
+    @media (min-width:768px) { .hdr__nav { display:flex; } }
+    .hdr__nav a {
+      font-size:.875rem; font-weight:500; color:var(--muted);
+      transition:color .2s; position:relative;
+    }
+    .hdr__nav a::after {
+      content:''; position:absolute; bottom:-3px; left:0; right:0;
+      height:2px; background:var(--green);
+      transform:scaleX(0); transform-origin:left;
+      transition:transform .25s var(--ease-out);
+    }
+    .hdr__nav a:hover { color:var(--dark); }
+    .hdr__nav a:hover::after { transform:scaleX(1); }
+
+    .hdr__cta {
+      display:none; padding:.5rem 1.25rem; border-radius:999px;
+      background:var(--green); color:#fff; font-size:.875rem; font-weight:600;
+      border:none; cursor:pointer; transition:transform .2s, box-shadow .2s;
+    }
+    @media (min-width:768px) { .hdr__cta { display:inline-flex; } }
+    .hdr__cta:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(100,181,87,.35); }
+
+    .burger { display:flex; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:.5rem; }
+    @media (min-width:768px) { .burger { display:none; } }
+    .burger span { display:block; width:24px; height:2px; background:var(--dark); border-radius:2px; transition:transform .3s,opacity .3s; }
+    .burger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity:0; }
+    .burger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+
+    /* ─── LANGUAGE TOGGLE ─────────────────────────────────────────────── */
+    .lang-btn {
+      display:none; align-items:center; gap:.2rem;
+      background:none; border:2px solid rgba(100,181,87,.4); border-radius:999px;
+      padding:.35rem .85rem; cursor:pointer; font-family:inherit;
+      transition:border-color .2s, background .2s;
+    }
+    @media (min-width:768px) { .lang-btn { display:flex; } }
+    .lang-btn:hover { border-color:var(--green); background:rgba(100,181,87,.08); }
+    .lang-opt { font-size:.75rem; font-weight:700; color:var(--muted); transition:color .2s; line-height:1; }
+    .lang-opt--active { color:var(--green); }
+    .lang-sep { font-size:.75rem; color:rgba(100,181,87,.45); margin:0 .15rem; line-height:1; }
+
+    .mob-lang-btn {
+      display:flex; align-items:center; gap:.2rem;
+      background:none; border:2px solid rgba(100,181,87,.4); border-radius:999px;
+      padding:.6rem 1.1rem; cursor:pointer; font-family:inherit;
+      margin:.5rem .5rem 0; transition:border-color .2s, background .2s; width:fit-content;
+    }
+    .mob-lang-btn:hover { border-color:var(--green); background:rgba(100,181,87,.08); }
+
+    .mob-nav {
+      display:none; flex-direction:column;
+      background:rgba(255,255,255,.97); backdrop-filter:blur(14px);
+      border-top:1px solid var(--border); padding:1rem;
+    }
+    .mob-nav.open { display:flex; }
+    .mob-nav a { padding:.875rem 1rem; font-weight:500; border-radius:.75rem; transition:background .2s,color .2s; }
+    .mob-nav a:hover { background:var(--light); color:var(--green); }
+    .mob-nav .m-cta {
+      margin:.5rem .5rem 0; text-align:center;
+      background:var(--green); color:#fff;
+      border-radius:999px; padding:.875rem; font-weight:600;
+    }
+
+    /* ─── HERO ────────────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100svh;
+      display: flex; align-items: center; justify-content: center;
+      padding-top: 4.5rem;
+      background: var(--dark);
+      position: relative; overflow: hidden;
+    }
+
+    /* grid overlay */
+    .hero__grid {
+      position:absolute; inset:0; pointer-events:none;
+      background-image:
+        linear-gradient(rgba(100,181,87,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100,181,87,.04) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, black 20%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, black 20%, transparent 75%);
+    }
+
+    /* ambient blobs */
+    .blob {
+      position:absolute; border-radius:50%; pointer-events:none;
+      filter:blur(72px); will-change:transform;
+    }
+    .blob-1 { width:480px;height:480px;background:rgba(100,181,87,.09);top:5%;left:-8%;    animation:float1 14s ease-in-out infinite; }
+    .blob-2 { width:360px;height:360px;background:rgba(26,47,40,.7);   bottom:10%;right:2%;  animation:float2 17s ease-in-out infinite; }
+    .blob-3 { width:240px;height:240px;background:rgba(100,181,87,.06);top:45%;left:28%;    animation:float1 20s ease-in-out infinite reverse; }
+
+    /* DNA helix (right) */
+    .hero__dna {
+      position:absolute; right:6%; top:50%; transform:translateY(-50%);
+      animation:bob 7s ease-in-out infinite;
+      will-change:transform;
+    }
+    @media (max-width:1100px) { .hero__dna { right:1%; opacity:.5; } }
+    @media (max-width:768px)  { .hero__dna { display:none; } }
+
+    .hero__body { position:relative; z-index:2; text-align:center; max-width:54rem; padding:4rem 0; }
+
+    .hero__eyebrow {
+      font-size:.75rem; text-transform:uppercase; letter-spacing:.22em;
+      color:var(--green); font-weight:600; margin-bottom:1.5rem;
+      opacity:0; animation:fadeUp .7s var(--ease-out) .3s forwards;
+    }
+
+    .hero__h1 {
+      font-family:var(--font-h);
+      font-size:clamp(2.4rem,7vw,5.25rem);
+      font-weight:800; color:#fff; line-height:1.08; margin-bottom:1.5rem;
+      opacity:0; animation:fadeUp .75s var(--ease-out) .5s forwards;
+    }
+    .hero__h1 .evo { display:inline-block; margin-right:.2em; }
+    .hero__h1 .acc {
+      display:inline-block; position:relative;
+      background:linear-gradient(135deg, var(--green) 0%, #91d483 45%, var(--green) 100%);
+      background-size:200% auto;
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    /* reveal mask over gradient text */
+    .hero__h1 .acc::after {
+      content:''; position:absolute; inset:0;
+      background:var(--dark);
+      transform:scaleX(1); transform-origin:right;
+      transition:transform 1.1s var(--ease-out) 1s;
+    }
+    .hero__h1 .acc.unmasked::after { transform:scaleX(0); }
+
+    .hero__line {
+      display:block; height:3px; border-radius:999px; margin:0 auto 2rem;
+      background:linear-gradient(90deg, var(--green), var(--dark-3));
+      opacity:0; animation:lineGrow 1s var(--ease-out) 1.3s forwards;
+    }
+
+    .hero__sub {
+      font-size:clamp(1rem,2vw,1.2rem); color:rgba(255,255,255,.62);
+      max-width:38rem; margin:0 auto 2.5rem; line-height:1.75;
+      opacity:0; animation:fadeUp .7s var(--ease-out) .9s forwards;
+    }
+
+    .hero__btns {
+      display:flex; flex-direction:column; align-items:center; gap:1rem;
+      opacity:0; animation:fadeUp .7s var(--ease-out) 1.1s forwards;
+    }
+    @media (min-width:480px) { .hero__btns { flex-direction:row; justify-content:center; } }
+
+    .hero__scroll {
+      position:absolute; bottom:1.75rem; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:.5rem;
+      opacity:0; animation:fadeIn 1s ease 2.2s forwards;
+    }
+    .hero__scroll span { font-size:.65rem; text-transform:uppercase; letter-spacing:.18em; color:rgba(255,255,255,.35); }
+    .chevron {
+      width:1.25rem; height:1.25rem;
+      border-right:2px solid rgba(100,181,87,.55);
+      border-bottom:2px solid rgba(100,181,87,.55);
+      transform:rotate(45deg);
+      animation:bob 1.6s ease-in-out infinite;
+    }
+
+    /* ─── BUTTONS ─────────────────────────────────────────────────────── */
+    .btn-g {
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding:.875rem 2.25rem; border-radius:999px;
+      background:linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);
+      color:#fff; font-weight:600; font-size:.9375rem; border:none; cursor:pointer;
+      transition:transform .2s, box-shadow .2s;
+      text-decoration:none;
+    }
+    .btn-g:hover { transform:translateY(-2px) scale(1.02); box-shadow:0 8px 28px rgba(100,181,87,.4); }
+
+    .btn-ol {
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:.875rem 2.25rem; border-radius:999px;
+      border:2px solid rgba(255,255,255,.3); color:#fff; font-weight:600; font-size:.9375rem;
+      background:transparent; transition:border-color .2s,background .2s,transform .2s;
+      text-decoration:none; cursor:pointer;
+    }
+    .btn-ol:hover { border-color:var(--green); background:rgba(100,181,87,.1); transform:translateY(-2px); }
+
+    .btn-w {
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding:.875rem 2.25rem; border-radius:999px;
+      background:#fff; color:var(--dark); font-weight:600; font-size:.9375rem;
+      border:none; cursor:pointer;
+      transition:transform .2s,box-shadow .2s; text-decoration:none;
+    }
+    .btn-w:hover { transform:translateY(-2px) scale(1.02); box-shadow:0 8px 24px rgba(255,255,255,.2); }
+    .btn-w svg { stroke:var(--dark); }
+
+    .btn-olg {
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:.875rem 2.25rem; border-radius:999px;
+      border:2px solid var(--green); color:var(--green); font-weight:600; font-size:.9375rem;
+      background:transparent; transition:background .2s,color .2s,transform .2s;
+      cursor:pointer;
+    }
+    .btn-olg:hover { background:var(--green); color:#fff; transform:translateY(-2px); }
+
+    /* ─── STATS STRIP ─────────────────────────────────────────────────── */
+    .stats {
+      background:var(--dark);
+      border-top: 1px solid rgba(100,181,87,.12);
+      border-bottom: 1px solid rgba(100,181,87,.12);
+      padding: 2.75rem 0;
+    }
+    .stats__grid {
+      display:grid; grid-template-columns:repeat(2,1fr); gap:2rem; text-align:center;
+    }
+    @media (min-width:768px) { .stats__grid { grid-template-columns:repeat(4,1fr); } }
+    .stat__val {
+      font-family:var(--font-h); font-size:clamp(1.75rem,4vw,2.5rem);
+      font-weight:800; color:#fff; line-height:1; margin-bottom:.4rem;
+    }
+    .stat__val em { color:var(--green); font-style:normal; }
+    .stat__lbl { font-size:.75rem; color:rgba(255,255,255,.45); text-transform:uppercase; letter-spacing:.1em; }
+
+    /* ─── SECTION COMMONS ─────────────────────────────────────────────── */
+    .sec-label {
+      font-size:.75rem; text-transform:uppercase; letter-spacing:.22em;
+      color:var(--green); font-weight:600; margin-bottom:1rem;
+    }
+    .sec-h {
+      font-family:var(--font-h);
+      font-size:clamp(1.75rem,4vw,3rem);
+      font-weight:700; line-height:1.15; margin-bottom:1.5rem;
+    }
+    .sec-h .acc { color:var(--green); }
+    .sec-h--w { color:#fff; }
+    .sec-center { text-align:center; }
+    .sec-center .sec-h, .sec-center .sec-label { display:block; }
+
+    /* ─── WHY ─────────────────────────────────────────────────────────── */
+    .why { padding:6.5rem 0 7rem; background:var(--light); }
+    .why__hd { text-align:center; margin-bottom:3.5rem; }
+    .why__grid { display:grid; grid-template-columns:1fr; gap:1.5rem; }
+    @media (min-width:768px) { .why__grid { grid-template-columns:repeat(3,1fr); } }
+
+    .fcard {
+      position:relative; background:#fff; border-radius:1.25rem; padding:2.5rem 2rem;
+      box-shadow:0 1px 4px rgba(9,21,17,.05), 0 6px 18px rgba(9,21,17,.04);
+      overflow:hidden;
+      transition:transform .35s var(--ease-out), box-shadow .35s;
+    }
+    .fcard::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(135deg, rgba(100,181,87,.07) 0%, rgba(9,21,17,.04) 100%);
+      opacity:0; transition:opacity .3s;
+    }
+    .fcard:hover { transform:translateY(-7px); box-shadow:0 16px 48px rgba(9,21,17,.13); }
+    .fcard:hover::before { opacity:1; }
+    .fcard__bg {
+      position:absolute; top:1.25rem; right:1.25rem;
+      font-family:var(--font-h); font-size:4rem; font-weight:800;
+      color:rgba(100,181,87,.07); line-height:1; pointer-events:none;
+    }
+    .fcard__ico {
+      width:3rem; height:3rem; border-radius:.75rem; margin-bottom:1.5rem;
+      background:linear-gradient(135deg, var(--green) 0%, var(--dark-3) 100%);
+      display:flex; align-items:center; justify-content:center;
+      position:relative;
+    }
+    .fcard__ico svg { width:1.5rem; height:1.5rem; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .fcard h3 { font-family:var(--font-h); font-size:1.1rem; font-weight:600; margin-bottom:.75rem; }
+    .fcard p  { color:var(--muted); font-size:.9375rem; line-height:1.7; }
+
+    /* ─── GAP ─────────────────────────────────────────────────────────── */
+    .gap { padding:6rem 0; background:#fff; }
+    .gap__row {
+      display:grid; grid-template-columns:1fr; gap:3rem; align-items:center;
+    }
+    @media (min-width:1024px) { .gap__row { grid-template-columns:1fr 1fr; gap:5rem; } }
+
+    .prob-list { list-style:none; margin-top:2rem; display:flex; flex-direction:column; gap:1rem; }
+    .prob-item {
+      display:flex; align-items:flex-start; gap:1rem;
+      padding:1rem 1.25rem; background:var(--light);
+      border-radius:.875rem; border-left:3px solid var(--green);
+      transition:transform .25s, box-shadow .25s;
+    }
+    .prob-item:hover { transform:translateX(5px); box-shadow:0 4px 18px rgba(9,21,17,.07); }
+    .prob-ico {
+      flex-shrink:0; width:2.5rem; height:2.5rem; border-radius:.625rem;
+      background:var(--green-dim);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .prob-ico svg { width:1.2rem; height:1.2rem; stroke:var(--green); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .prob-txt { font-weight:500; padding-top:.3rem; line-height:1.5; }
+
+    .stat-box {
+      position:relative; border-radius:1.5rem; padding:4.5rem 2rem; text-align:center;
+      background:linear-gradient(135deg, var(--green) 0%, var(--dark-3) 55%, var(--dark) 100%);
+      overflow:hidden;
+    }
+    .stat-box::before {
+      content:''; position:absolute; top:-35%;right:-15%;width:55%;height:60%;
+      border-radius:50%; background:radial-gradient(circle,rgba(255,255,255,.12) 0%,transparent 70%);
+    }
+    .stat-box::after {
+      content:''; position:absolute; bottom:-25%;left:-8%;width:45%;height:50%;
+      border-radius:50%; border:2px solid rgba(255,255,255,.07);
+    }
+    .stat-num {
+      font-family:var(--font-h); font-size:clamp(3.5rem,8vw,5.5rem);
+      font-weight:800; color:#fff; line-height:1; margin-bottom:.75rem;
+    }
+    .stat-desc { color:rgba(255,255,255,.72); font-size:1.0625rem; }
+
+    /* ─── TECHNOLOGY ──────────────────────────────────────────────────── */
+    .tech {
+      padding:7rem 0; background:var(--dark); position:relative; overflow:hidden;
+    }
+    .tech__bg {
+      position:absolute; inset:0; pointer-events:none;
+      background:
+        radial-gradient(ellipse 55% 65% at 22% 55%, rgba(100,181,87,.09) 0%,transparent 55%),
+        radial-gradient(ellipse 45% 45% at 82% 18%, rgba(26,47,40,.5) 0%,transparent 50%);
+    }
+    /* scan line */
+    .tech__scan {
+      position:absolute; left:0; right:0; height:1px;
+      background:linear-gradient(90deg, transparent, rgba(100,181,87,.28), transparent);
+      animation:scanLine 9s linear infinite; pointer-events:none;
+    }
+    .tech__hd { text-align:center; margin-bottom:4rem; position:relative; z-index:2; }
+    .tech__hd p { color:rgba(255,255,255,.6); max-width:36rem; margin:0 auto; font-size:1.0625rem; }
+
+    .steps { display:grid; grid-template-columns:1fr; gap:1.5rem; position:relative; z-index:2; }
+    @media (min-width:768px) { .steps { grid-template-columns:repeat(3,1fr); } }
+
+    .step {
+      background:rgba(255,255,255,.04);
+      backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,.08); border-radius:1.25rem; padding:2.25rem;
+      position:relative; overflow:hidden;
+      transition:background .3s, border-color .3s, transform .3s;
+    }
+    .step::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg, var(--green), transparent);
+      opacity:0; transition:opacity .3s;
+    }
+    .step:hover { background:rgba(255,255,255,.07); border-color:rgba(100,181,87,.22); transform:translateY(-5px); }
+    .step:hover::before { opacity:1; }
+
+    .step__top { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.75rem; }
+    .step__num { font-family:var(--font-h); font-size:2.5rem; font-weight:800; color:rgba(100,181,87,.18); line-height:1; }
+    .step__tag { font-size:.6rem; text-transform:uppercase; letter-spacing:.17em; color:var(--green); font-weight:600; }
+
+    /* connector line between step cards (desktop) */
+    .step__conn {
+      display:none; position:absolute; top:3.5rem; left:calc(100% - .5rem);
+      width:calc(100% - 2.5rem); height:1px;
+      background:linear-gradient(90deg, rgba(100,181,87,.5), transparent);
+      z-index:3;
+    }
+    @media (min-width:768px) { .step__conn { display:block; } }
+
+    .step__ico {
+      width:3.5rem; height:3.5rem; border-radius:.875rem; margin-bottom:1.5rem;
+      background:linear-gradient(135deg, var(--green) 0%, var(--dark-3) 100%);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .step__ico svg { width:1.75rem; height:1.75rem; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .step h3 { font-family:var(--font-h); font-size:1.4rem; font-weight:600; color:#fff; margin-bottom:.75rem; }
+    .step p  { color:rgba(255,255,255,.52); font-size:.9375rem; line-height:1.65; }
+
+    .tech__quote { position:relative; z-index:2; margin-top:4rem; text-align:center; }
+    .tech__quote blockquote {
+      font-size:clamp(1.05rem,2.5vw,1.3rem); color:rgba(255,255,255,.65);
+      font-style:italic; max-width:44rem; margin:0 auto; line-height:1.75;
+    }
+
+    /* ─── ABOUT ───────────────────────────────────────────────────────── */
+    .about { padding:6.5rem 0 7rem; background:var(--light); }
+    .about__hd { text-align:center; margin-bottom:3.5rem; }
+    .about__grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin-bottom:3.5rem; }
+    @media (min-width:768px) { .about__grid { grid-template-columns:repeat(3,1fr); } }
+
+    .acard {
+      background:#fff; border-radius:1.25rem; overflow:hidden;
+      box-shadow:0 1px 4px rgba(9,21,17,.05), 0 6px 18px rgba(9,21,17,.04);
+      transition:transform .35s var(--ease-out), box-shadow .35s;
+    }
+    .acard:hover { transform:translateY(-7px); box-shadow:0 20px 52px rgba(9,21,17,.13); }
+    .acard__bar { height:3px; background:linear-gradient(90deg, var(--green), var(--dark-3)); }
+    .acard__body { padding:2.5rem 2rem; }
+    .acard__ico {
+      width:3rem; height:3rem; border-radius:.75rem; margin-bottom:1.5rem;
+      background:linear-gradient(135deg, var(--green) 0%, var(--dark-3) 100%);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .acard__ico svg { width:1.4rem; height:1.4rem; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .acard h3 { font-family:var(--font-h); font-size:1.1rem; font-weight:600; margin-bottom:.75rem; }
+    .acard p  { color:var(--muted); font-size:.9375rem; line-height:1.7; }
+
+    /* pilot */
+    .pilot {
+      background:linear-gradient(135deg, var(--dark) 0%, var(--dark-3) 100%);
+      border-radius:1.5rem; padding:3rem 2rem; position:relative; overflow:hidden;
+    }
+    @media (min-width:768px) { .pilot { padding:4rem 3rem; } }
+    .pilot::before {
+      content:''; position:absolute; top:0;right:0;width:50%;height:100%;
+      background:radial-gradient(circle at 72% 28%, rgba(100,181,87,.11) 0%,transparent 55%);
+    }
+    .pilot__in { position:relative; z-index:2; text-align:center; }
+    .pilot__in h3 {
+      font-family:var(--font-h); font-size:clamp(1.5rem,3vw,2rem);
+      font-weight:700; color:#fff; margin-bottom:.75rem;
+    }
+    .pilot__in > p { color:rgba(255,255,255,.62); margin-bottom:2.5rem; }
+    .pilot__steps {
+      display:grid; grid-template-columns:1fr; gap:1rem; text-align:left;
+    }
+    @media (min-width:640px) { .pilot__steps { grid-template-columns:repeat(3,1fr); } }
+    .p-step {
+      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
+      border-radius:1rem; padding:1.5rem;
+      transition:background .25s,border-color .25s;
+    }
+    .p-step:hover { background:rgba(255,255,255,.08); border-color:rgba(100,181,87,.22); }
+    .p-step__n {
+      width:2rem; height:2rem; border-radius:50%;
+      background:var(--green); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:.8125rem; margin-bottom:.875rem;
+    }
+    .p-step h4 { font-weight:600; color:#fff; margin-bottom:.5rem; font-size:.9375rem; }
+    .p-step p  { font-size:.8125rem; color:rgba(255,255,255,.52); line-height:1.55; }
+
+    /* ─── CTA ─────────────────────────────────────────────────────────── */
+    .cta {
+      padding:7.5rem 0;
+      background:linear-gradient(135deg, var(--dark) 0%, var(--dark-3) 100%);
+      position:relative; overflow:hidden;
+    }
+    .cta::before {
+      content:''; position:absolute; top:0;right:0;width:50%;height:50%;
+      background:radial-gradient(circle at 72% 28%, rgba(100,181,87,.1) 0%,transparent 55%);
+    }
+    .cta::after {
+      content:''; position:absolute; bottom:0;left:0;width:35%;height:35%;
+      background:radial-gradient(circle at 28% 72%, rgba(100,181,87,.08) 0%,transparent 55%);
+    }
+    .cta__in { position:relative; z-index:2; text-align:center; max-width:52rem; margin:0 auto; }
+    .cta__in h2 {
+      font-family:var(--font-h); font-size:clamp(1.75rem,4vw,3rem);
+      font-weight:700; color:#fff; line-height:1.15; margin-bottom:1.5rem;
+    }
+    .cta__sub { font-size:1.125rem; color:rgba(255,255,255,.62); max-width:36rem; margin:0 auto 2.5rem; line-height:1.75; }
+    .contact-card {
+      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+      border-radius:1.25rem; padding:1.75rem 2rem;
+      max-width:26rem; margin:0 auto 2.5rem; text-align:left;
+      transition:background .25s,border-color .25s;
+    }
+    .contact-card:hover { background:rgba(255,255,255,.09); border-color:rgba(100,181,87,.22); }
+    .cc__head { display:flex; align-items:center; gap:1rem; margin-bottom:1.25rem; }
+    .cc__ava {
+      width:3.5rem; height:3.5rem; border-radius:50%; flex-shrink:0;
+      background:linear-gradient(135deg, var(--green) 0%, var(--dark-3) 100%);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .cc__ava svg { width:1.75rem; height:1.75rem; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .cc__name { font-weight:600; color:#fff; font-size:1.0625rem; }
+    .cc__role { color:var(--green); font-size:.875rem; }
+    .cc__links { display:flex; flex-direction:column; gap:.75rem; }
+    .cc__link {
+      display:flex; align-items:center; gap:.75rem;
+      color:rgba(255,255,255,.58); font-size:.9375rem;
+      transition:color .2s;
+    }
+    .cc__link:hover { color:var(--green); }
+    .cc__link svg { width:1.1rem; height:1.1rem; stroke:currentColor; fill:none; stroke-width:2; flex-shrink:0; }
+    .cta__btns { display:flex; flex-direction:column; align-items:center; gap:1rem; }
+    @media (min-width:480px) { .cta__btns { flex-direction:row; justify-content:center; } }
+
+    /* ─── FOOTER ──────────────────────────────────────────────────────── */
+    .ftr { padding:3rem 0; background:var(--light); border-top:1px solid var(--border); }
+    .ftr__row {
+      display:flex; flex-direction:column; align-items:center; gap:1.5rem;
+    }
+    @media (min-width:768px) { .ftr__row { flex-direction:row; justify-content:space-between; } }
+    .ftr__logo img { height:2rem; width:auto; }
+    .ftr__nav { display:flex; align-items:center; gap:2rem; flex-wrap:wrap; justify-content:center; }
+    .ftr__nav a { font-size:.875rem; color:var(--muted); transition:color .2s; }
+    .ftr__nav a:hover { color:var(--green); }
+    .ftr__copy { font-size:.875rem; color:var(--muted); }
+
+    /* ─── NEWSLETTER MODAL ────────────────────────────────────────────── */
+    #nl-modal {
+      border:none; border-radius:1.25rem; padding:0;
+      width:calc(100% - 2rem); max-width:28rem;
+      box-shadow:0 30px 70px rgba(0,0,0,.25);
+      background:#fff;
+    }
+    #nl-modal::backdrop { background:rgba(0,0,0,.5); backdrop-filter:blur(6px); }
+    .nl__bar { height:6px; background:linear-gradient(90deg, var(--green), var(--dark)); border-radius:1.25rem 1.25rem 0 0; }
+    .nl__body { padding:2.5rem; }
+    .nl__close {
+      position:absolute; top:1.25rem; right:1.25rem;
+      background:none; border:none; cursor:pointer; padding:.4rem;
+      border-radius:.5rem; color:var(--muted);
+      font-size:1.2rem; line-height:1;
+      transition:background .2s,color .2s;
+    }
+    .nl__close:hover { background:var(--light); color:var(--dark); }
+    .nl__ico {
+      width:3.5rem; height:3.5rem; border-radius:.875rem; margin:0 auto 1.25rem;
+      background:linear-gradient(135deg, var(--green) 0%, var(--dark) 100%);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .nl__ico svg { width:1.5rem; height:1.5rem; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .nl__h { font-family:var(--font-h); font-size:1.3rem; font-weight:700; margin-bottom:.5rem; }
+    .nl__p { font-size:.875rem; color:var(--muted); line-height:1.6; }
+    .nl__form { display:flex; flex-direction:column; gap:1rem; margin-top:2rem; }
+    .nl__inp {
+      width:100%; padding:.875rem 1rem; border:1px solid var(--border);
+      border-radius:.75rem; font-size:.9375rem; color:var(--dark); font-family:inherit;
+      background:var(--light); outline:none;
+      transition:border-color .2s,box-shadow .2s;
+    }
+    .nl__inp:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(100,181,87,.15); }
+    .nl__sub {
+      width:100%; padding:.875rem; border-radius:.75rem; border:none; cursor:pointer;
+      background:linear-gradient(135deg, var(--green), var(--dark));
+      color:#fff; font-size:.9375rem; font-weight:600; font-family:inherit;
+      transition:opacity .2s,transform .2s;
+    }
+    .nl__sub:hover { opacity:.92; transform:translateY(-1px); }
+    .nl__fine { text-align:center; font-size:.75rem; color:var(--muted); margin-top:.875rem; }
+
+    /* ─── DNA SVG ─────────────────────────────────────────────────────── */
+    .dna-svg { width:200px; height:460px; }
+    .dna-n { animation:bob 3.5s ease-in-out infinite; }
+    .dna-n:nth-child(3n+1) { animation-duration:4s;   animation-delay:.4s; }
+    .dna-n:nth-child(3n+2) { animation-duration:4.7s; animation-delay:.9s; }
+    .dna-n:nth-child(3n)   { animation-duration:5.2s; animation-delay:.2s; }
+
+    /* ─── RESPONSIVE FIXES ────────────────────────────────────────────── */
+    @media (max-width:480px) {
+      .pilot { padding:2rem 1.25rem; }
+      .cta { padding:5rem 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════════════════ -->
+<header class="hdr" id="hdr">
+  <div class="wrap">
+    <div class="hdr__row">
+      <a href="#home" class="hdr__logo">
+        <img src="public/images/logo-darwic.png" alt="Darwic" />
+      </a>
+      <nav class="hdr__nav" aria-label="Main">
+        <a href="#why">Why Darwic</a>
+        <a href="#technology">Technology</a>
+        <a href="#about">About Us</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <button class="lang-btn" onclick="toggleLang()" aria-label="Toggle language">
+          <span class="lang-opt lang-opt--active lang-opt-en">EN</span>
+          <span class="lang-sep">|</span>
+          <span class="lang-opt lang-opt-cs">CS</span>
+        </button>
+        <a href="#contact" class="hdr__cta" id="hdr-cta">Get Started</a>
+        <button class="burger" id="burger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <nav class="mob-nav" id="mob-nav" aria-label="Mobile">
+    <a href="#why"        onclick="closeMob()">Why Darwic</a>
+    <a href="#technology" onclick="closeMob()">Technology</a>
+    <a href="#about"      onclick="closeMob()">About Us</a>
+    <a href="#contact"    onclick="closeMob()">Contact</a>
+    <a href="#contact" class="m-cta" onclick="closeMob()" id="mob-cta">Get Started</a>
+    <button class="mob-lang-btn" onclick="toggleLang()">
+      <span class="lang-opt lang-opt--active lang-opt-en">EN</span>
+      <span class="lang-sep">|</span>
+      <span class="lang-opt lang-opt-cs">CS</span>
+    </button>
+  </nav>
+</header>
+
+<!-- ══ HERO ════════════════════════════════════════════════════════════ -->
+<section class="hero" id="home">
+  <div class="hero__grid" aria-hidden="true"></div>
+  <div class="blob blob-1" aria-hidden="true"></div>
+  <div class="blob blob-2" aria-hidden="true"></div>
+  <div class="blob blob-3" aria-hidden="true"></div>
+
+  <!-- Animated DNA Helix -->
+  <div class="hero__dna" aria-hidden="true">
+    <svg class="dna-svg" viewBox="0 0 200 460" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ng1" cx="35%" cy="35%" r="65%">
+          <stop offset="0%"   stop-color="#91d483"/>
+          <stop offset="100%" stop-color="#091511"/>
+        </radialGradient>
+        <radialGradient id="ng2" cx="40%" cy="30%" r="60%">
+          <stop offset="0%"   stop-color="#64B557"/>
+          <stop offset="100%" stop-color="#1a2f28"/>
+        </radialGradient>
+        <linearGradient id="stemG" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%"   stop-color="#64B557" stop-opacity=".7"/>
+          <stop offset="100%" stop-color="#091511" stop-opacity=".2"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Spine -->
+      <line x1="100" y1="18" x2="100" y2="445" stroke="url(#stemG)" stroke-width="1.5" opacity=".35"/>
+
+      <!-- Row 1 – tiny top -->
+      <circle class="dna-n" cx="100" cy="24" r="4"  fill="url(#ng2)" opacity=".5"/>
+      <circle class="dna-n" cx="88"  cy="36" r="3.5"fill="url(#ng2)" opacity=".4"/>
+
+      <!-- Row 2 -->
+      <circle class="dna-n" cx="70"  cy="60"  r="8"  fill="url(#ng1)"/>
+      <circle class="dna-n" cx="138" cy="60"  r="6"  fill="url(#ng2)" opacity=".75"/>
+      <line x1="70" y1="60" x2="138" y2="60" stroke="#64B557" stroke-width="2.5" opacity=".45"/>
+
+      <!-- Row 3 -->
+      <circle class="dna-n" cx="52"  cy="100" r="11" fill="url(#ng1)"/>
+      <circle class="dna-n" cx="150" cy="100" r="5"  fill="url(#ng2)" opacity=".8"/>
+      <line x1="52" y1="100" x2="150" y2="100" stroke="#64B557" stroke-width="2" opacity=".38"/>
+
+      <!-- Row 4 widest -->
+      <circle class="dna-n" cx="36"  cy="145" r="13" fill="url(#ng1)"/>
+      <circle class="dna-n" cx="162" cy="145" r="8"  fill="url(#ng2)"/>
+      <line x1="36" y1="145" x2="162" y2="145" stroke="#64B557" stroke-width="3" opacity=".55"/>
+
+      <!-- Row 5 -->
+      <circle class="dna-n" cx="50"  cy="190" r="9"  fill="url(#ng2)"/>
+      <circle class="dna-n" cx="155" cy="190" r="6"  fill="url(#ng1)" opacity=".8"/>
+      <line x1="50" y1="190" x2="155" y2="190" stroke="#64B557" stroke-width="2" opacity=".38"/>
+
+      <!-- Row 6 centre -->
+      <circle class="dna-n" cx="68"  cy="230" r="7"  fill="url(#ng2)" opacity=".9"/>
+      <circle class="dna-n" cx="142" cy="230" r="11" fill="url(#ng1)"/>
+      <line x1="68" y1="230" x2="142" y2="230" stroke="#64B557" stroke-width="2.5" opacity=".48"/>
+
+      <!-- Row 7 -->
+      <circle class="dna-n" cx="48"  cy="272" r="10" fill="url(#ng1)"/>
+      <circle class="dna-n" cx="156" cy="272" r="6"  fill="url(#ng2)" opacity=".7"/>
+      <line x1="48" y1="272" x2="156" y2="272" stroke="#64B557" stroke-width="2.5" opacity=".48"/>
+
+      <!-- Row 8 widest bottom -->
+      <circle class="dna-n" cx="34"  cy="315" r="13" fill="url(#ng1)"/>
+      <circle class="dna-n" cx="164" cy="315" r="7"  fill="url(#ng2)"/>
+      <line x1="34" y1="315" x2="164" y2="315" stroke="#64B557" stroke-width="3" opacity=".55"/>
+
+      <!-- Row 9 -->
+      <circle class="dna-n" cx="52"  cy="357" r="9"  fill="url(#ng2)" opacity=".82"/>
+      <circle class="dna-n" cx="150" cy="357" r="5.5"fill="url(#ng1)" opacity=".72"/>
+      <line x1="52" y1="357" x2="150" y2="357" stroke="#64B557" stroke-width="2" opacity=".38"/>
+
+      <!-- Row 10 -->
+      <circle class="dna-n" cx="72"  cy="397" r="7"  fill="url(#ng2)" opacity=".6"/>
+      <circle class="dna-n" cx="136" cy="397" r="5"  fill="url(#ng2)" opacity=".5"/>
+
+      <!-- Row 11 tiny bottom -->
+      <circle class="dna-n" cx="92"  cy="428" r="5"  fill="url(#ng2)" opacity=".4"/>
+      <circle class="dna-n" cx="108" cy="444" r="3.5"fill="url(#ng2)" opacity=".3"/>
+    </svg>
+  </div>
+
+  <div class="wrap">
+    <div class="hero__body">
+      <p class="hero__eyebrow">Biotech Platform</p>
+      <h1 class="hero__h1">
+        <span class="evo">Evolution</span>
+        <span class="acc" id="heroAcc">Accelerated</span>
+      </h1>
+      <span class="hero__line"></span>
+      <p class="hero__sub">
+        We take the reins of evolution where nature stops. A new era of engineered biology begins here.
+      </p>
+      <div class="hero__btns">
+        <a href="#contact" class="btn-g">Partner With Us</a>
+        <a href="#why"     class="btn-ol">Learn More</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__scroll" aria-hidden="true">
+    <span>Scroll</span>
+    <div class="chevron"></div>
+  </div>
+</section>
+
+<!-- ══ STATS ════════════════════════════════════════════════════════════ -->
+<section class="stats">
+  <div class="wrap">
+    <div class="stats__grid">
+      <div class="rv d1">
+        <div class="stat__val"><em>3×</em></div>
+        <div class="stat__lbl">Faster Evolution</div>
+      </div>
+      <div class="rv d2">
+        <div class="stat__val">+<em>200</em>°C</div>
+        <div class="stat__lbl">Stability Threshold</div>
+      </div>
+      <div class="rv d3">
+        <div class="stat__val"><em>10×</em></div>
+        <div class="stat__lbl">Cost Reduction</div>
+      </div>
+      <div class="rv d4">
+        <div class="stat__val"><em>3</em> Mo</div>
+        <div class="stat__lbl">POC Delivery</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHY ══════════════════════════════════════════════════════════════ -->
+<section class="why" id="why">
+  <div class="wrap">
+    <div class="why__hd">
+      <span class="sec-label rv">The Why</span>
+      <h2 class="sec-h rv d1">Redesigning Life for a <span class="acc">Sustainable Industry</span></h2>
+      <p class="rv d2" style="color:var(--muted);max-width:36rem;margin:0 auto;font-size:1.0625rem;line-height:1.75">
+        Darwic is a biotechnology forge. We engineer enzymes with properties that don't exist in nature, but that industry desperately needs.
+      </p>
+    </div>
+    <div class="why__grid">
+      <div class="fcard rv d1">
+        <span class="fcard__bg">01</span>
+        <div class="fcard__ico">
+          <!-- chip / platform icon -->
+          <svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+        </div>
+        <h3>Tech-Driven Bio-Platform</h3>
+        <p>Not just a lab — a comprehensive technology platform for enzyme innovation at industrial scale.</p>
+      </div>
+      <div class="fcard rv d2">
+        <span class="fcard__bg">02</span>
+        <div class="fcard__ico">
+          <!-- flask icon -->
+          <svg viewBox="0 0 24 24"><path d="M9 3h6M9 3v7l-4.5 9A1 1 0 0 0 5.4 21h13.2a1 1 0 0 0 .9-1.45L15 10V3"/><path d="M6.5 16h11"/></svg>
+        </div>
+        <h3>Engineered Enzymes</h3>
+        <p>We create enzymes with properties that don't exist in nature but industry desperately needs.</p>
+      </div>
+      <div class="fcard rv d3">
+        <span class="fcard__bg">03</span>
+        <div class="fcard__ico">
+          <!-- sparkle / star icon -->
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <h3>Properties Beyond Nature</h3>
+        <p>Resistant to temperature, pH, and time — custom-built for your reactor and production line.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ GAP ══════════════════════════════════════════════════════════════ -->
+<section class="gap">
+  <div class="wrap">
+    <div class="gap__row">
+      <div class="rv-l">
+        <span class="sec-label">The Gap</span>
+        <h2 class="sec-h">Nature is Slow.<br><span class="acc">Industry is Demanding.</span></h2>
+        <p style="color:var(--muted);line-height:1.75;max-width:32rem">
+          Industrial processes, drug manufacturing, plastic degradation — all are hitting their limits.
+          Natural enzymes are fragile, unstable, and expensive to maintain.
+        </p>
+        <ul class="prob-list" role="list">
+          <li class="prob-item">
+            <span class="prob-ico">
+              <!-- thermometer -->
+              <svg viewBox="0 0 24 24"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+            </span>
+            <span class="prob-txt">Thermal instability causes production shutdowns</span>
+          </li>
+          <li class="prob-item">
+            <span class="prob-ico">
+              <!-- warning triangle -->
+              <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </span>
+            <span class="prob-txt">pH sensitivity limits process conditions</span>
+          </li>
+          <li class="prob-item">
+            <span class="prob-ico">
+              <!-- clock -->
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
+            <span class="prob-txt">Short enzyme lifespan drives up costs</span>
+          </li>
+        </ul>
+      </div>
+      <div class="rv-r">
+        <div class="stat-box">
+          <div class="stat-num">$B+</div>
+          <div class="stat-desc">Lost annually due to enzyme thermal instability</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TECHNOLOGY ═══════════════════════════════════════════════════════ -->
+<section class="tech" id="technology">
+  <div class="tech__bg" aria-hidden="true"></div>
+  <div class="tech__scan" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="tech__hd">
+      <span class="sec-label rv">The Darwic Engine</span>
+      <h2 class="sec-h sec-h--w rv d1">Directed Evolution <span class="acc">on Steroids</span></h2>
+      <p class="rv d2">Our proprietary improvement cycle creates enzymes that outperform nature.</p>
+    </div>
+    <div class="steps">
+      <!-- Step 1 -->
+      <div class="step rv d1">
+        <div class="step__conn" aria-hidden="true"></div>
+        <div class="step__top">
+          <span class="step__num">01</span>
+          <span class="step__tag">AI / DATA</span>
+        </div>
+        <div class="step__ico">
+          <!-- brain / cpu -->
+          <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg>
+        </div>
+        <h3>Design</h3>
+        <p>Computational prediction of optimal variants using protein language models and ML.</p>
+      </div>
+      <!-- Step 2 -->
+      <div class="step rv d2">
+        <div class="step__conn" aria-hidden="true"></div>
+        <div class="step__top">
+          <span class="step__num">02</span>
+          <span class="step__tag">DNA EDIT</span>
+        </div>
+        <div class="step__ico">
+          <!-- DNA strand -->
+          <svg viewBox="0 0 24 24"><path d="M3 3c2.5 0 5 1 7 3s4.5 3 7 3"/><path d="M3 21c2.5 0 5-1 7-3s4.5-3 7-3"/><path d="M3 9c2 0 4 .5 6 1.5"/><path d="M15 13.5c2 1 4 1.5 6 1.5"/><path d="M3 15c2 0 4-.5 6-1.5"/><path d="M15 10.5c2-1 4-1.5 6-1.5"/></svg>
+        </div>
+        <h3>Mutation</h3>
+        <p>Precise genetic modifications at scale — thousands of variants per cycle.</p>
+      </div>
+      <!-- Step 3 -->
+      <div class="step rv d3">
+        <div class="step__top">
+          <span class="step__num">03</span>
+          <span class="step__tag">SELECT</span>
+        </div>
+        <div class="step__ico">
+          <!-- target -->
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        </div>
+        <h3>Screening</h3>
+        <p>High-throughput selection of winners — only the best variants move forward.</p>
+      </div>
+    </div>
+    <div class="tech__quote rv">
+      <blockquote>
+        "We create enzymes resistant to temperature, pH, and time.
+        Custom-built for your reactor."
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ABOUT ════════════════════════════════════════════════════════════ -->
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="about__hd">
+      <span class="sec-label rv">About Us</span>
+      <h2 class="sec-h rv d1">Why Partner <span class="acc">With Us?</span></h2>
+      <p class="rv d2" style="color:var(--muted);max-width:36rem;margin:0 auto;font-size:1.0625rem">
+        Strategic, scientific, and commercial advantages — built in from day one.
+      </p>
+    </div>
+    <div class="about__grid">
+      <div class="acard rv d1">
+        <div class="acard__bar"></div>
+        <div class="acard__body">
+          <div class="acard__ico">
+            <svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg>
+          </div>
+          <h3>Strategic Edge</h3>
+          <p>Be first in your sector to offer stabilized products. Thermo-stable enzymes are a defensible differentiator in diagnostics, food tech, and industrial biotech.</p>
+        </div>
+      </div>
+      <div class="acard rv d2">
+        <div class="acard__bar"></div>
+        <div class="acard__body">
+          <div class="acard__ico">
+            <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
+          <h3>Validated Research</h3>
+          <p>Collaboration with the University of West Bohemia (FAV) provides elite ML research access and HPC infrastructure, ensuring top-tier computational accuracy.</p>
+        </div>
+      </div>
+      <div class="acard rv d3">
+        <div class="acard__bar"></div>
+        <div class="acard__body">
+          <div class="acard__ico">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          </div>
+          <h3>Flexible Integration</h3>
+          <p>Choose sequence licensing for in-house production or direct protein supply. We adapt to your existing manufacturing pipeline without disruption.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pilot Programme -->
+    <div class="pilot rv">
+      <div class="pilot__in">
+        <h3>Let's Launch a Pilot</h3>
+        <p>A 3-month Proof-of-Concept to stabilize your most critical enzyme.</p>
+        <div class="pilot__steps">
+          <div class="p-step">
+            <div class="p-step__n">1</div>
+            <h4>Technical Consultation</h4>
+            <p>Define your stability targets, operating temperature range, and process constraints.</p>
+          </div>
+          <div class="p-step">
+            <div class="p-step__n">2</div>
+            <h4>AI-Driven Design</h4>
+            <p>pLLM sequence generation and digital validation against your specific enzyme class.</p>
+          </div>
+          <div class="p-step">
+            <div class="p-step__n">3</div>
+            <h4>Lab Testing &amp; ROI</h4>
+            <p>Wet-lab testing of top candidates followed by a full ROI analysis.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ═══════════════════════════════════════════════════════════════ -->
+<section class="cta" id="contact">
+  <div class="wrap">
+    <div class="cta__in">
+      <span class="sec-label rv">Contact</span>
+      <h2 class="rv d1">Stop Fighting Biology.<br><span style="color:var(--green)">Start Engineering It.</span></h2>
+      <p class="cta__sub rv d2">
+        Let's talk about how we can stabilize your most critical enzymes.
+      </p>
+      <div class="contact-card rv d3">
+        <div class="cc__head">
+          <div class="cc__ava">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <div class="cc__name">Michael Rytíř</div>
+            <div class="cc__role">Business Lead</div>
+          </div>
+        </div>
+        <div class="cc__links">
+          <a href="mailto:michael@darwic.com" class="cc__link">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            michael@darwic.com
+          </a>
+          <a href="https://www.linkedin.com/in/michael-rytir/" class="cc__link" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+      <div class="cta__btns rv d4">
+        <a href="mailto:michael@darwic.com" class="btn-w">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span id="cta-contact-text">Contact Us</span>
+        </a>
+        <button class="btn-olg" onclick="document.getElementById('nl-modal').showModal()">
+          Subscribe to Updates
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════════════ -->
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr__row">
+      <a href="#home" class="ftr__logo">
+        <img src="public/images/logo-darwic.png" alt="Darwic" />
+      </a>
+      <nav class="ftr__nav" aria-label="Footer">
+        <a href="#why">Why Darwic</a>
+        <a href="#technology">Technology</a>
+        <a href="#about">About Us</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <p class="ftr__copy">© 2025 Darwic. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ NEWSLETTER MODAL ══════════════════════════════════════════════════ -->
+<dialog id="nl-modal">
+  <div class="nl__bar"></div>
+  <div class="nl__body">
+    <button class="nl__close" onclick="document.getElementById('nl-modal').close()" aria-label="Close">✕</button>
+    <div style="text-align:center">
+      <div class="nl__ico">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <h2 class="nl__h">Stay in the Loop</h2>
+      <p class="nl__p">Get exclusive updates on our biotech breakthroughs, funding milestones, and partnership opportunities.</p>
+    </div>
+    <form class="nl__form" id="nl-form">
+      <input class="nl__inp" type="text"  name="name"  placeholder="Your name"       required />
+      <input class="nl__inp" type="email" name="email" placeholder="your@email.com"  required />
+      <button class="nl__sub" type="submit">Subscribe to Newsletter</button>
+    </form>
+    <p class="nl__fine">We respect your privacy. Unsubscribe at any time.</p>
+  </div>
+</dialog>
+
+<!-- ══ SCRIPTS ═══════════════════════════════════════════════════════════ -->
+<script>
+  /* ── mobile nav ──────────────────────────────────────── */
+  const burger  = document.getElementById('burger');
+  const mobNav  = document.getElementById('mob-nav');
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    mobNav.classList.toggle('open');
+  });
+  function closeMob() {
+    burger.classList.remove('open');
+    mobNav.classList.remove('open');
+  }
+
+  /* ── header on scroll ────────────────────────────────── */
+  const hdr = document.getElementById('hdr');
+  window.addEventListener('scroll', () => {
+    hdr.classList.toggle('scrolled', window.scrollY > 24);
+  }, { passive: true });
+
+  /* ── hero text mask reveal ───────────────────────────── */
+  window.addEventListener('load', () => {
+    setTimeout(() => document.getElementById('heroAcc').classList.add('unmasked'), 300);
+  });
+
+  /* ── intersection observer (scroll reveal) ───────────── */
+  const revEls = document.querySelectorAll('.rv,.rv-l,.rv-r,.rv-s');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('on');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+  revEls.forEach(el => io.observe(el));
+
+  /* ── smooth scroll ───────────────────────────────────── */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      const target = document.querySelector(id);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        closeMob();
+      }
+    });
+  });
+
+  /* ── newsletter modal – close on backdrop click ──────── */
+  const nlModal = document.getElementById('nl-modal');
+  nlModal.addEventListener('click', e => { if (e.target === nlModal) nlModal.close(); });
+
+  /* ── newsletter form submit ──────────────────────────── */
+  document.getElementById('nl-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]');
+    btn.textContent = 'Subscribing…';
+    btn.disabled = true;
+    try {
+      const fd = new FormData(e.target);
+      await fetch('https://formspree.io/f/mzdjwvpk', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(fd)),
+      });
+      btn.textContent = 'Subscribed!';
+      setTimeout(() => nlModal.close(), 1800);
+    } catch {
+      btn.textContent = 'Subscribe to Newsletter';
+      btn.disabled = false;
+    }
+  });
+</script>
+
+<!-- ══ LANGUAGE SYSTEM ══════════════════════════════════════════════════ -->
+<script>
+  const LANGS = {
+    en: {
+      navWhy:'Why Darwic', navTech:'Technology', navAbout:'About Us', navContact:'Contact', navCta:'Get Started',
+      heroBadge:'Biotech Platform', heroWord1:'Evolution', heroWord2:'Accelerated',
+      heroSub:'We take the reins of evolution where nature stops. A new era of engineered biology begins here.',
+      heroCta:'Partner With Us', heroLearn:'Learn More', heroScroll:'Scroll',
+      stat1:'Faster Evolution', stat2:'Stability Threshold', stat3:'Cost Reduction', stat4:'POC Delivery',
+      whyLabel:'The Why',
+      whyHeading:'Redesigning Life for a <span class="acc">Sustainable Industry</span>',
+      whySub:"Darwic is a biotechnology forge. We engineer enzymes with properties that don't exist in nature, but that industry desperately needs.",
+      why1Title:'Tech-Driven Bio-Platform', why1Desc:"Not just a lab — a comprehensive technology platform for enzyme innovation at industrial scale.",
+      why2Title:'Engineered Enzymes',       why2Desc:"We create enzymes with properties that don't exist in nature but industry desperately needs.",
+      why3Title:'Properties Beyond Nature', why3Desc:'Resistant to temperature, pH, and time — custom-built for your reactor and production line.',
+      gapLabel:'The Gap',
+      gapHeading:'Nature is Slow.<br><span class="acc">Industry is Demanding.</span>',
+      gapSub:'Industrial processes, drug manufacturing, plastic degradation — all are hitting their limits. Natural enzymes are fragile, unstable, and expensive to maintain.',
+      gap1:'Thermal instability causes production shutdowns', gap2:'pH sensitivity limits process conditions', gap3:'Short enzyme lifespan drives up costs',
+      gapStat:'Lost annually due to enzyme thermal instability',
+      techLabel:'The Darwic Engine',
+      techHeading:'Directed Evolution <span class="acc">on Steroids</span>',
+      techSub:'Our proprietary improvement cycle creates enzymes that outperform nature.',
+      step1Tag:'AI / DATA', step1Title:'Design',    step1Desc:'Computational prediction of optimal variants using protein language models and ML.',
+      step2Tag:'DNA EDIT',  step2Title:'Mutation',  step2Desc:'Precise genetic modifications at scale — thousands of variants per cycle.',
+      step3Tag:'SELECT',    step3Title:'Screening', step3Desc:'High-throughput selection of winners — only the best variants move forward.',
+      techQuote:'"We create enzymes resistant to temperature, pH, and time.<br>Custom-built for your reactor."',
+      aboutLabel:'About Us',
+      aboutHeading:'Why Partner <span class="acc">With Us?</span>',
+      aboutSub:'Strategic, scientific, and commercial advantages — built in from day one.',
+      about1Title:'Strategic Edge',       about1Desc:'Be first in your sector to offer stabilized products. Thermo-stable enzymes are a defensible differentiator in diagnostics, food tech, and industrial biotech.',
+      about2Title:'Validated Research',   about2Desc:'Collaboration with the University of West Bohemia (FAV) provides elite ML research access and HPC infrastructure, ensuring top-tier computational accuracy.',
+      about3Title:'Flexible Integration', about3Desc:'Choose sequence licensing for in-house production or direct protein supply. We adapt to your existing manufacturing pipeline without disruption.',
+      pilotHeading:"Let's Launch a Pilot", pilotSub:'A 3-month Proof-of-Concept to stabilize your most critical enzyme.',
+      pilot1Title:'Technical Consultation', pilot1Desc:'Define your stability targets, operating temperature range, and process constraints.',
+      pilot2Title:'AI-Driven Design',       pilot2Desc:'pLLM sequence generation and digital validation against your specific enzyme class.',
+      pilot3Title:'Lab Testing & ROI',      pilot3Desc:'Wet-lab testing of top candidates followed by a full ROI analysis.',
+      ctaLabel:'Contact',
+      ctaHeading:'Stop Fighting Biology.<br><span style="color:var(--green)">Start Engineering It.</span>',
+      ctaSub:"Let's talk about how we can stabilize your most critical enzymes.",
+      ctaRole:'Business Lead', ctaContact:'Contact Us', ctaSubscribe:'Subscribe to Updates',
+      footerCopy:'\u00a9 2025 Darwic. All rights reserved.',
+      nlTitle:'Stay in the Loop',
+      nlSub:'Get exclusive updates on our biotech breakthroughs, funding milestones, and partnership opportunities.',
+      nlName:'Your name', nlSubmit:'Subscribe to Newsletter', nlFine:'We respect your privacy. Unsubscribe at any time.',
+    },
+    cs: {
+      navWhy:'Pro\u010d Darwic', navTech:'Technologie', navAbout:'O n\u00e1s', navContact:'Kontakt', navCta:'Za\u010d\u00edt',
+      heroBadge:'Biotechnologick\u00e1 platforma', heroWord1:'Evoluce', heroWord2:'Urychlená',
+      heroSub:'P\u0159eb\u00edr\u00e1me ot\u011b\u017ee evoluce tam, kde p\u0159\u00edroda p\u0159est\u00e1v\u00e1. Nov\u00e1 \u00e9ra in\u017een\u00fdrsk\u00e9 biologie za\u010d\u00edn\u00e1 zde.',
+      heroCta:'Spolupracujte s n\u00e1mi', heroLearn:'Zjistit v\u00edce', heroScroll:'Rolovat',
+      stat1:'Rychlej\u0161\u00ed evoluce', stat2:'Pr\u00e1h stability', stat3:'Sn\u00ed\u017een\u00ed n\u00e1klad\u016f', stat4:'Dod\u00e1n\u00ed PoC',
+      whyLabel:'Pro\u010d to d\u011bl\u00e1me',
+      whyHeading:'P\u0159eprojektov\u00e1v\u00e1me \u017eivot pro <span class="acc">Udr\u017eiteln\u00fd pr\u016fmysl</span>',
+      whySub:'Darwic je biotechnologick\u00e1 kov\u00e1rna. Vytv\u00e1\u0159\u00edme enzymy s vlastnostmi, kter\u00e9 v p\u0159\u00edrod\u011b neexistuj\u00ed, ale pr\u016fmysl je zoufale pot\u0159ebuje.',
+      why1Title:'Technologicky \u0159\u00edzen\u00e1 bio-platforma', why1Desc:'Nejsme jen laborato\u0159 \u2013 jsme komplexn\u00ed technologick\u00e1 platforma pro inovace enzym\u016f v pr\u016fmyslov\u00e9m m\u011b\u0159\u00edtku.',
+      why2Title:'In\u017een\u00fdrsk\u00e9 enzymy',              why2Desc:'Vytv\u00e1\u0159\u00edme enzymy s vlastnostmi, kter\u00e9 v p\u0159\u00edrod\u011b neexistuj\u00ed, ale pr\u016fmysl je zoufale pot\u0159ebuje.',
+      why3Title:'Vlastnosti p\u0159esahuj\u00edc\u00ed p\u0159\u00edrodu', why3Desc:'Odol\u00e9 v\u016f\u010di teplot\u011b, pH a \u010dasu \u2013 navr\u017een\u00e9 na m\u00edru pro v\u00e1\u0161 reaktor a v\u00fdrobn\u00ed linku.',
+      gapLabel:'Probl\u00e9m',
+      gapHeading:'P\u0159\u00edroda je pomal\u00e1.<br><span class="acc">Pr\u016fmysl je n\u00e1ro\u010dn\u00fd.</span>',
+      gapSub:'Pr\u016fmyslov\u00e9 procesy, v\u00fdroba l\u00e9k\u016f, rozklad plast\u016f \u2013 v\u0161echny nar\u00e1\u017eej\u00ed na sv\u00e9 limity. P\u0159\u00edrodn\u00ed enzymy jsou k\u0159ehk\u00e9, nestabiln\u00ed a n\u00e1kladn\u00e9 na \u00fadr\u017ebu.',
+      gap1:'Tepeln\u00e1 nestabilita zp\u016fsobuje v\u00fdrobn\u00ed odst\u00e1vky', gap2:'Citlivost na pH omezuje podm\u00ednky procesu', gap3:'Kr\u00e1tk\u00e1 \u017eivotnost enzym\u016f zvy\u0161uje n\u00e1klady',
+      gapStat:'Ztr\u00e1ceno ro\u010dn\u011b kv\u016fli tepeln\u00e9 nestabilit\u011b enzym\u016f',
+      techLabel:'Motor Darwic',
+      techHeading:'\u0158\u00edzen\u00e1 evoluce <span class="acc">na steroidech</span>',
+      techSub:'N\u00e1\u0161 propriet\u00e1rn\u00ed cyklus zlep\u0161ov\u00e1n\u00ed vytv\u00e1\u0159\u00ed enzymy, kter\u00e9 p\u0159ekon\u00e1vaj\u00ed p\u0159\u00edrodu.',
+      step1Tag:'AI / DATA', step1Title:'N\u00e1vrh',    step1Desc:'V\u00fdpo\u010detn\u00ed predikce optim\u00e1ln\u00edch variant pomoc\u00ed proteinov\u00fdch jazykov\u00fdch model\u016f a ML.',
+      step2Tag:'DNA EDIT',  step2Title:'Mutace',        step2Desc:'P\u0159esn\u00e9 genetick\u00e9 modifikace ve velk\u00e9m m\u011b\u0159\u00edtku \u2013 tis\u00edce variant za cyklus.',
+      step3Tag:'V\u00ddb\u011bR', step3Title:'Screening', step3Desc:'V\u00fdb\u011br nejlep\u0161\u00edch variant ve vysok\u00e9m pr\u016ftoku \u2013 d\u00e1l postupuj\u00ed jen ti nejlep\u0161\u00ed.',
+      techQuote:'\u201eVytv\u00e1\u0159\u00edme enzymy odol\u00e9 v\u016f\u010di teplot\u011b, pH a \u010dasu.<br>Navr\u017een\u00e9 na m\u00edru pro v\u00e1\u0161 reaktor.\u201c',
+      aboutLabel:'O n\u00e1s',
+      aboutHeading:'Pro\u010d spolupracovat <span class="acc">S n\u00e1mi?</span>',
+      aboutSub:'Strategick\u00e9, v\u011bdeck\u00e9 a obchodn\u00ed v\u00fdhody \u2013 zabudovan\u00e9 od prvn\u00edho dne.',
+      about1Title:'Strategick\u00e1 v\u00fdhoda',   about1Desc:'Bu\u010fte prvn\u00ed ve sv\u00e9m sektoru, kdo nab\u00ednne stabilizovan\u00e9 produkty. Termostabiln\u00ed enzymy jsou obhajiteln\u00fdm diferenci\u00e1torem v diagnostice, potravin\u00e1\u0159sk\u00fdch technologi\u00edch a pr\u016fmyslov\u00e9 biotechnologii.',
+      about2Title:'Ov\u011b\u0159en\u00fd v\u00fdzkum',    about2Desc:'Spolupr\u00e1ce se Z\u00e1pado\u010deskou univerzitou (FAV) poskytuje p\u0159\u00edstup k elitn\u00edmu v\u00fdzkumu strojov\u00e9ho u\u010den\u00ed a HPC infrastruktu\u0159e, zaji\u0161\u0165uj\u00edc\u00ed \u0161pi\u010dkovou v\u00fdpo\u010detn\u00ed p\u0159esnost.',
+      about3Title:'Flexibiln\u00ed integrace', about3Desc:'Vyberte si licencov\u00e1n\u00ed sekvenc\u00ed pro vlastn\u00ed v\u00fdrobu nebo p\u0159\u00edm\u00e9 dod\u00e1vky protein\u016f. P\u0159izp\u016fsobíme se va\u0161emu st\u00e1vaj\u00edc\u00edmu v\u00fdrobn\u00edmu procesu bez naru\u0161en\u00ed.',
+      pilotHeading:'Spus\u0165me pilotn\u00ed projekt', pilotSub:'3m\u011bs\u00ed\u010dn\u00ed proof-of-concept pro stabilizaci va\u0161eho nejkritick\u011bj\u0161\u00edho enzymu.',
+      pilot1Title:'Technick\u00e1 konzultace', pilot1Desc:'Definujte sv\u00e9 c\u00edle stability, provozn\u00ed teplotn\u00ed rozsah a procesn\u00ed omezen\u00ed.',
+      pilot2Title:'N\u00e1vrh \u0159\u00edzen\u00fd AI',       pilot2Desc:'Generov\u00e1n\u00ed sekvenc\u00ed pomoc\u00ed pLLM a digit\u00e1ln\u00ed validace pro v\u00e1\u0161 konkr\u00e9tn\u00ed typ enzymu.',
+      pilot3Title:'Laboratorní testov\u00e1n\u00ed a ROI', pilot3Desc:'Mokr\u00e9 laboratorní testov\u00e1n\u00ed nejlep\u0161\u00edch kandid\u00e1t\u016f s n\u00e1slednou kompletn\u00ed anal\u00fdzou ROI.',
+      ctaLabel:'Kontakt',
+      ctaHeading:'P\u0159esta\u0148te bojovat s biologi\u00ed.<br><span style="color:var(--green)">Za\u010dn\u011bte ji \u0159\u00eddit.</span>',
+      ctaSub:'Pojd\u011bme si promluvit o tom, jak m\u016f\u017eeme stabilizovat va\u0161e nejkritick\u011bj\u0161\u00ed enzymy.',
+      ctaRole:'Obchodn\u00ed vedouc\u00ed', ctaContact:'Kontaktujte n\u00e1s', ctaSubscribe:'Odeb\u00edrat novinky',
+      footerCopy:'\u00a9 2025 Darwic. V\u0161echna pr\u00e1va vyhrazena.',
+      nlTitle:'Z\u016fsta\u0148te v obraze',
+      nlSub:'Z\u00edskejte exkluzivn\u00ed aktualizace o na\u0161ich biotechnologick\u00fdch pr\u016flomech, finan\u010dn\u00edch miln\u00edc\u00edch a partnerskch p\u0159\u00edle\u017eitostech.',
+      nlName:'Va\u0161e jm\u00e9no', nlSubmit:'P\u0159ihl\u00e1sit se k odb\u011bru', nlFine:'Respektujeme va\u0161e soukrom\u00ed. Odhl\u00e1sit se m\u016f\u017eete kdykoliv.',
+    }
+  };
+
+  let currentLang = localStorage.getItem('darwic-lang') || 'en';
+
+  function setLang(lang) {
+    const t = LANGS[lang];
+    const s  = sel => document.querySelector(sel);
+    const sa = sel => document.querySelectorAll(sel);
+
+    // Header
+    s('.hdr__nav a[href="#why"]').textContent        = t.navWhy;
+    s('.hdr__nav a[href="#technology"]').textContent = t.navTech;
+    s('.hdr__nav a[href="#about"]').textContent      = t.navAbout;
+    s('.hdr__nav a[href="#contact"]').textContent    = t.navContact;
+    s('#hdr-cta').textContent                        = t.navCta;
+    s('.mob-nav a[href="#why"]').textContent         = t.navWhy;
+    s('.mob-nav a[href="#technology"]').textContent  = t.navTech;
+    s('.mob-nav a[href="#about"]').textContent       = t.navAbout;
+    s('.mob-nav a[href="#contact"]').textContent     = t.navContact;
+    s('#mob-cta').textContent                        = t.navCta;
+
+    // Hero
+    s('.hero__eyebrow').textContent     = t.heroBadge;
+    s('.hero__h1 .evo').textContent     = t.heroWord1;
+    s('#heroAcc').textContent           = t.heroWord2;
+    s('.hero__sub').textContent         = t.heroSub;
+    s('.hero__btns .btn-g').textContent = t.heroCta;
+    s('.hero__btns .btn-ol').textContent= t.heroLearn;
+    s('.hero__scroll span').textContent = t.heroScroll;
+
+    // Stats
+    const stLbls = sa('.stat__lbl');
+    stLbls[0].textContent = t.stat1; stLbls[1].textContent = t.stat2;
+    stLbls[2].textContent = t.stat3; stLbls[3].textContent = t.stat4;
+
+    // Why
+    s('#why .sec-label').innerHTML  = t.whyLabel;
+    s('#why .sec-h').innerHTML      = t.whyHeading;
+    s('#why .why__hd p').textContent= t.whySub;
+    const fc = sa('.fcard');
+    fc[0].querySelector('h3').textContent = t.why1Title; fc[0].querySelector('p').textContent = t.why1Desc;
+    fc[1].querySelector('h3').textContent = t.why2Title; fc[1].querySelector('p').textContent = t.why2Desc;
+    fc[2].querySelector('h3').textContent = t.why3Title; fc[2].querySelector('p').textContent = t.why3Desc;
+
+    // Gap
+    s('.gap .sec-label').textContent       = t.gapLabel;
+    s('.gap .sec-h').innerHTML             = t.gapHeading;
+    s('.gap__row .rv-l > p').textContent   = t.gapSub;
+    const pb = sa('.prob-txt');
+    pb[0].textContent = t.gap1; pb[1].textContent = t.gap2; pb[2].textContent = t.gap3;
+    s('.stat-desc').textContent            = t.gapStat;
+
+    // Technology
+    s('#technology .sec-label').innerHTML = t.techLabel;
+    s('#technology .sec-h').innerHTML     = t.techHeading;
+    s('.tech__hd p').textContent          = t.techSub;
+    const st = sa('.step');
+    st[0].querySelector('.step__tag').textContent = t.step1Tag; st[0].querySelector('h3').textContent = t.step1Title; st[0].querySelector('p').textContent = t.step1Desc;
+    st[1].querySelector('.step__tag').textContent = t.step2Tag; st[1].querySelector('h3').textContent = t.step2Title; st[1].querySelector('p').textContent = t.step2Desc;
+    st[2].querySelector('.step__tag').textContent = t.step3Tag; st[2].querySelector('h3').textContent = t.step3Title; st[2].querySelector('p').textContent = t.step3Desc;
+    s('.tech__quote blockquote').innerHTML = t.techQuote;
+
+    // About
+    s('#about .sec-label').innerHTML   = t.aboutLabel;
+    s('#about .sec-h').innerHTML       = t.aboutHeading;
+    s('#about .about__hd p').textContent = t.aboutSub;
+    const ac = sa('.acard');
+    ac[0].querySelector('h3').textContent = t.about1Title; ac[0].querySelector('p').textContent = t.about1Desc;
+    ac[1].querySelector('h3').textContent = t.about2Title; ac[1].querySelector('p').textContent = t.about2Desc;
+    ac[2].querySelector('h3').textContent = t.about3Title; ac[2].querySelector('p').textContent = t.about3Desc;
+    s('.pilot__in h3').textContent     = t.pilotHeading;
+    s('.pilot__in > p').textContent    = t.pilotSub;
+    const ps = sa('.p-step');
+    ps[0].querySelector('h4').textContent = t.pilot1Title; ps[0].querySelector('p').textContent = t.pilot1Desc;
+    ps[1].querySelector('h4').textContent = t.pilot2Title; ps[1].querySelector('p').textContent = t.pilot2Desc;
+    ps[2].querySelector('h4').textContent = t.pilot3Title; ps[2].querySelector('p').textContent = t.pilot3Desc;
+
+    // CTA
+    s('#contact .sec-label').textContent = t.ctaLabel;
+    s('#contact h2').innerHTML           = t.ctaHeading;
+    s('.cta__sub').textContent           = t.ctaSub;
+    s('.cc__role').textContent           = t.ctaRole;
+    s('#cta-contact-text').textContent   = t.ctaContact;
+    s('.cta__btns .btn-olg').textContent = t.ctaSubscribe;
+
+    // Footer
+    s('.ftr__nav a[href="#why"]').textContent        = t.navWhy;
+    s('.ftr__nav a[href="#technology"]').textContent = t.navTech;
+    s('.ftr__nav a[href="#about"]').textContent      = t.navAbout;
+    s('.ftr__nav a[href="#contact"]').textContent    = t.navContact;
+    s('.ftr__copy').textContent                      = t.footerCopy;
+
+    // Newsletter modal
+    s('.nl__h').textContent              = t.nlTitle;
+    s('.nl__p').textContent              = t.nlSub;
+    s('input[name="name"]').placeholder  = t.nlName;
+    const nlBtn = s('.nl__sub');
+    if (!nlBtn.disabled) nlBtn.textContent = t.nlSubmit;
+    s('.nl__fine').textContent           = t.nlFine;
+
+    // Toggle active state
+    sa('.lang-opt-en').forEach(el => el.classList.toggle('lang-opt--active', lang === 'en'));
+    sa('.lang-opt-cs').forEach(el => el.classList.toggle('lang-opt--active', lang === 'cs'));
+
+    currentLang = lang;
+    localStorage.setItem('darwic-lang', lang);
+  }
+
+  function toggleLang() {
+    setLang(currentLang === 'en' ? 'cs' : 'en');
+  }
+
+  // Apply saved language on load
+  setLang(currentLang);
+</script>
+</body>
+</html>

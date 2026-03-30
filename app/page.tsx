@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { LanguageProvider } from "@/context/language-context"
 import { Header } from "@/components/header"
 import { HeroSection } from "@/components/hero-section"
 import { WhySection } from "@/components/why-section"
@@ -40,7 +41,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <>
+    <LanguageProvider>
       <Header />
       <main>
         <HeroSection />
@@ -52,6 +53,6 @@ export default function HomePage() {
       </main>
       <Footer />
       <NewsletterPopup isOpen={isNewsletterOpen} onClose={closeNewsletter} />
-    </>
+    </LanguageProvider>
   )
 }

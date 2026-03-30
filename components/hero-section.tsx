@@ -2,9 +2,11 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { useLanguage } from "@/context/language-context"
 
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     // Trigger animation after component mounts
@@ -27,19 +29,19 @@ export function HeroSection() {
       
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
         <div className="text-center max-w-4xl mx-auto">
-          <p 
+          <p
             className="text-sm uppercase tracking-[0.2em] text-[#64B557] font-medium mb-6 transition-all duration-700"
             style={{
               opacity: isVisible ? 1 : 0,
               transform: isVisible ? 'translateY(0)' : 'translateY(1rem)',
             }}
           >
-            Biotech Platform
+            {t.hero.badge}
           </p>
           
           {/* Animated slogan with mask reveal effect */}
           <h1 className="font-[var(--font-orbitron)] text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#091511] mb-6 tracking-tight text-balance relative overflow-hidden">
-            <span 
+            <span
               className="inline-block transition-all duration-1000 ease-out mr-3 sm:mr-4 md:mr-5"
               style={{
                 opacity: isVisible ? 1 : 0,
@@ -47,7 +49,7 @@ export function HeroSection() {
                 transitionDelay: '200ms',
               }}
             >
-              Evolution
+              {t.hero.word1}
             </span>
             <span 
               className="inline-block bg-clip-text text-transparent relative"
@@ -64,14 +66,14 @@ export function HeroSection() {
                 }}
                 aria-hidden="true"
               />
-              <span 
+              <span
                 className="inline-block transition-all duration-700 ease-out"
                 style={{
                   opacity: isVisible ? 1 : 0,
                   transitionDelay: '400ms',
                 }}
               >
-                Accelerated
+                {t.hero.word2}
               </span>
             </span>
           </h1>
@@ -96,7 +98,7 @@ export function HeroSection() {
               transitionDelay: '1000ms',
             }}
           >
-            We take the reins of evolution where nature stops. A new era of engineered biology begins here.
+            {t.hero.description}
           </p>
           
           <div 
@@ -114,13 +116,13 @@ export function HeroSection() {
                 background: 'linear-gradient(135deg, #64B557 0%, #091511 100%)',
               }}
             >
-              Partner With Us
+              {t.hero.cta}
             </Link>
             <Link
               href="#why"
               className="w-full sm:w-auto inline-flex items-center justify-center rounded-full border-2 border-[#091511] px-8 py-3 text-base font-medium text-[#091511] hover:bg-[#091511] hover:text-white transition-all focus:outline-none focus:ring-2 focus:ring-[#091511] focus:ring-offset-2"
             >
-              Learn More
+              {t.hero.learnMore}
             </Link>
           </div>
         </div>

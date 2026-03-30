@@ -2,12 +2,14 @@
 
 import Link from "next/link"
 import { Mail, Linkedin, User } from "lucide-react"
+import { useLanguage } from "@/context/language-context"
 
 interface CTASectionProps {
   onNewsletterClick: () => void
 }
 
 export function CTASection({ onNewsletterClick }: CTASectionProps) {
+  const { t } = useLanguage()
   return (
     <section 
       id="contact" 
@@ -34,14 +36,14 @@ export function CTASection({ onNewsletterClick }: CTASectionProps) {
 
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
         <p className="text-sm uppercase tracking-[0.2em] text-[#64B557] font-medium mb-4">
-          Contact
+          {t.cta.eyebrow}
         </p>
         <h2 className="font-[var(--font-orbitron)] text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 text-balance">
-          Stop Fighting Biology.{" "}
-          <span className="text-[#64B557]">Start Engineering It.</span>
+          {t.cta.heading1}{" "}
+          <span className="text-[#64B557]">{t.cta.heading2}</span>
         </h2>
         <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-10 leading-relaxed text-pretty">
-          Let&apos;s talk about how we can stabilize your most critical enzymes.
+          {t.cta.description}
         </p>
 
         {/* Contact Person Card */}
@@ -57,7 +59,7 @@ export function CTASection({ onNewsletterClick }: CTASectionProps) {
             </div>
             <div className="text-left">
               <h3 className="font-semibold text-white text-lg">Michael Rytíř</h3>
-              <p className="text-[#64B557] text-sm">Business Lead</p>
+              <p className="text-[#64B557] text-sm">{t.cta.businessLead}</p>
             </div>
           </div>
           <div className="space-y-3">
@@ -86,14 +88,14 @@ export function CTASection({ onNewsletterClick }: CTASectionProps) {
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 text-base font-medium text-[#091511] bg-white hover:bg-white/90 transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#091511]"
           >
             <Mail className="w-5 h-5" aria-hidden="true" />
-            Contact Us
+            {t.cta.contactUs}
           </Link>
           <button
             onClick={onNewsletterClick}
             className="w-full sm:w-auto inline-flex items-center justify-center rounded-full border-2 border-[#64B557] px-8 py-3 text-base font-medium text-[#64B557] hover:bg-[#64B557] hover:text-white transition-all focus:outline-none focus:ring-2 focus:ring-[#64B557] focus:ring-offset-2 focus:ring-offset-[#091511]"
             type="button"
           >
-            Subscribe to Updates
+            {t.cta.subscribe}
           </button>
         </div>
 

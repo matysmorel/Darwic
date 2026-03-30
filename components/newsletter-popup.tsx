@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { X, Mail, User, Loader2, CheckCircle } from "lucide-react"
+import { useLanguage } from "@/context/language-context"
 
 interface NewsletterPopupProps {
   isOpen: boolean
@@ -16,6 +17,7 @@ export function NewsletterPopup({ isOpen, onClose }: NewsletterPopupProps) {
   const [error, setError] = useState("")
   const dialogRef = useRef<HTMLDialogElement>(null)
   const firstInputRef = useRef<HTMLInputElement>(null)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const dialog = dialogRef.current
@@ -48,7 +50,7 @@ export function NewsletterPopup({ isOpen, onClose }: NewsletterPopupProps) {
     setIsSubmitting(true)
 
     try {
-      const response = await fetch("https://formspree.io/f/xlgpojyw", {
+      const response = await fetch("https://formspree.io/f/mzdjwvpk", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +74,7 @@ export function NewsletterPopup({ isOpen, onClose }: NewsletterPopupProps) {
         throw new Error("Submission failed")
       }
     } catch {
-      setError("Something went wrong. Please try again.")
+      setError(t.newsletter.error)
     } finally {
       setIsSubmitting(false)
     }
@@ -101,7 +103,7 @@ export function NewsletterPopup({ isOpen, onClose }: NewsletterPopupProps) {
         <button
           onClick={onClose}
           className="absolute right-4 top-6 rounded-full p-2 text-muted-foreground hover:bg-[#F8F8F8] hover:text-[#091511] transition-colors focus:outline-none focus:ring-2 focus:ring-[#64B557]"
-          aria-label="Close newsletter popup"
+          aria-label={t.newsletter.closeLabel}
           type="button"
         >
           <X className="h-5 w-5" aria-hidden="true" />
@@ -119,10 +121,10 @@ export function NewsletterPopup({ isOpen, onClose }: NewsletterPopupProps) {
                 <CheckCircle className="h-8 w-8 text-white" aria-hidden="true" />
               </div>
               <h3 className="font-[var(--font-orbitron)] text-2xl font-bold text-[#091511] mb-2">
-                Welcome Aboard!
+                {t.newsletter.successTitle}
               </h3>
               <p className="text-muted-foreground">
-                You&apos;re now part of the evolution. We&apos;ll be in touch soon.
+                {t.newsletter.successMessage}
               </p>
             </div>
           ) : (
@@ -137,14 +139,14 @@ export function NewsletterPopup({ isOpen, onClose }: NewsletterPopupProps) {
                 >
                   <Mail className="h-7 w-7 text-white" aria-hidden="true" />
                 </div>
-                <h2 
-                  id="newsletter-title" 
+                <h2
+                  id="newsletter-title"
                   className="font-[var(--font-orbitron)] text-2xl font-bold text-[#091511] mb-2"
                 >
-                  Stay in the Loop
+                  {t.newsletter.title}
                 </h2>
                 <p id="newsletter-description" className="text-muted-foreground text-sm">
-                  Get exclusive updates on our biotech breakthroughs, funding milestones, and partnership opportunities.
+                  {t.newsletter.description}
                 </p>
               </div>
 
@@ -152,7 +154,7 @@ export function NewsletterPopup({ isOpen, onClose }: NewsletterPopupProps) {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="newsletter-name" className="sr-only">
-                    Your name
+                    {t.newsletter.nameLabel}
                   </label>
                   <div className="relative">
                     <User 
@@ -166,7 +168,7 @@ export function NewsletterPopup({ isOpen, onClose }: NewsletterPopupProps) {
                       name="name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="Your name"
+                      placeholder={t.newsletter.namePlaceholder}
                       required
                       className="w-full rounded-xl border border-border bg-[#F8F8F8] py-3 pl-12 pr-4 text-[#091511] placeholder:text-muted-foreground focus:border-[#64B557] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#64B557]/20 transition-all"
                       aria-required="true"
@@ -176,7 +178,7 @@ export function NewsletterPopup({ isOpen, onClose }: NewsletterPopupProps) {
 
                 <div>
                   <label htmlFor="newsletter-email" className="sr-only">
-                    Email address
+                    {t.newsletter.emailLabel}
                   </label>
                   <div className="relative">
                     <Mail 
@@ -214,16 +216,16 @@ export function NewsletterPopup({ isOpen, onClose }: NewsletterPopupProps) {
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-2">
                       <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
-                      <span>Subscribing...</span>
+                      <span>{t.newsletter.submitting}</span>
                     </span>
                   ) : (
-                    "Subscribe to Newsletter"
+                    t.newsletter.submitButton
                   )}
                 </button>
               </form>
 
               <p className="mt-4 text-center text-xs text-muted-foreground">
-                We respect your privacy. Unsubscribe at any time.
+                {t.newsletter.privacy}
               </p>
             </>
           )}

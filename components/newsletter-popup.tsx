@@ -85,7 +85,7 @@ export function NewsletterPopup({ isOpen, onClose }: NewsletterPopupProps) {
   return (
     <dialog
       ref={dialogRef}
-      className="fixed inset-0 z-50 m-auto w-full max-w-md rounded-2xl bg-transparent p-0 backdrop:bg-black/50 backdrop:backdrop-blur-sm"
+      className="fixed inset-0 z-50 m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl bg-transparent p-0 backdrop:bg-black/50 backdrop:backdrop-blur-sm md:w-full"
       aria-labelledby="newsletter-title"
       aria-describedby="newsletter-description"
     >

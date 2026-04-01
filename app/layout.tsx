@@ -17,7 +17,18 @@ const orbitron = Orbitron({
 
 export const metadata: Metadata = {
   title: 'Darwic | Evolution Accelerated',
-  description: 'We take the reins of evolution where nature stops. A new era of engineered biology begins here.',
+  description: 'Darwic engineers high-performance enzyme and protein variants through accelerated directed evolution — pioneering engineered biology for sustainable industry.',
+  keywords: ['enzyme', 'protein', 'engineered biology', 'directed evolution', 'biotechnology', 'industrial enzymes'],
+  openGraph: {
+    title: 'Darwic | Evolution Accelerated',
+    description: 'Darwic engineers high-performance enzyme and protein variants through accelerated directed evolution — pioneering engineered biology for sustainable industry.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Darwic | Evolution Accelerated',
+    description: 'Darwic engineers high-performance enzyme and protein variants through accelerated directed evolution — pioneering engineered biology for sustainable industry.',
+  },
   generator: 'v0.app',
   icons: {
     icon: [

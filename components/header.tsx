@@ -1,14 +1,20 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Menu, X } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const { lang, t, toggleLanguage } = useLanguage()
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 24)
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const navLinks = [
     { href: "#why", label: t.header.navWhy },
@@ -17,130 +23,136 @@ export function Header() {
     { href: "#contact", label: t.header.navContact },
   ]
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen)
-  }
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false)
-  }
+  const toggleMobileMenu = () => setIsMobileMenuOpen((v) => !v)
+  const closeMobileMenu = () => setIsMobileMenuOpen(false)
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center">
-            <div className="relative h-10 w-[140px]">
+    <header
+      className={[
+        "fixed top-0 left-0 right-0 z-50",
+        "bg-white/80 backdrop-blur-[14px] [backdrop-filter:blur(14px)_saturate(180%)]",
+        "border-b border-[rgba(226,232,240,.5)]",
+        "transition-[background,box-shadow] duration-300",
+        isScrolled ? "bg-white/[.96] shadow-[0_2px_24px_rgba(9,21,17,.08)]" : "",
+      ].join(" ")}
+    >
+      <div className="mx-auto max-w-[1280px] px-6 sm:px-8 lg:px-12">
+        <div className="flex h-[4.5rem] items-center justify-between">
+
+          {/* Logo */}
+          <a href="#home" className="flex-shrink-0">
+            <div className="relative h-[2.4rem] w-[140px]">
               <Image
                 src="/images/logo-darwic.png"
-                alt="Darwic Logo"
+                alt="Darwic"
                 fill
                 sizes="140px"
                 className="object-contain object-left"
                 priority
               />
             </div>
-          </Link>
+          </a>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
+          <nav className="hidden md:flex items-center gap-10" aria-label="Main">
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                className="group relative text-[.875rem] font-medium text-[#4a5568] hover:text-[#091511] transition-colors duration-200"
               >
                 {link.label}
-              </Link>
+                {/* Animated underline */}
+                <span
+                  className="absolute bottom-[-3px] left-0 right-0 h-[2px] rounded-full bg-[#64B557] scale-x-0 origin-left transition-transform duration-[250ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100"
+                  aria-hidden="true"
+                />
+              </a>
             ))}
           </nav>
 
           <div className="flex items-center gap-3">
-            {/* Language Toggle */}
+            {/* Language Toggle (desktop) */}
             <button
               onClick={toggleLanguage}
-              className="hidden md:flex items-center gap-0.5 rounded-full border-2 border-[#64B557]/40 bg-[#64B557]/5 px-3 py-1.5 text-xs font-semibold transition-colors hover:border-[#64B557] hover:bg-[#64B557]/10 focus:outline-none focus:ring-2 focus:ring-[#64B557]"
+              className="hidden md:flex items-center gap-[.2rem] rounded-full border-2 border-[rgba(100,181,87,.4)] px-[.85rem] py-[.35rem] cursor-pointer font-[inherit] transition-[border-color,background] duration-200 hover:border-[#64B557] hover:bg-[rgba(100,181,87,.08)] focus:outline-none focus:ring-2 focus:ring-[#64B557]"
               aria-label="Toggle language"
             >
-              <span className={lang === "en" ? "text-[#64B557]" : "text-muted-foreground"}>
+              <span className={`text-[.75rem] font-bold leading-none transition-colors ${lang === "en" ? "text-[#64B557]" : "text-[#4a5568]"}`}>
                 EN
               </span>
-              <span className="mx-1 text-[#64B557]/40">|</span>
-              <span className={lang === "cs" ? "text-[#64B557]" : "text-muted-foreground"}>
+              <span className="text-[.75rem] text-[rgba(100,181,87,.45)] mx-[.15rem] leading-none">|</span>
+              <span className={`text-[.75rem] font-bold leading-none transition-colors ${lang === "cs" ? "text-[#64B557]" : "text-[#4a5568]"}`}>
                 CS
               </span>
             </button>
 
             {/* Desktop CTA */}
-            <Link
+            <a
               href="#contact"
-              className="hidden md:inline-flex rounded-full bg-[#64B557] px-4 py-2 text-sm font-medium text-white hover:bg-[#64B557]/90 transition-colors focus:outline-none focus:ring-2 focus:ring-[#64B557] focus:ring-offset-2"
+              className="hidden md:inline-flex rounded-full bg-[#64B557] px-5 py-2 text-[.875rem] font-semibold text-white border-none cursor-pointer transition-[transform,box-shadow] duration-200 hover:-translate-y-px hover:shadow-[0_6px_20px_rgba(100,181,87,.35)]"
             >
               {t.header.cta}
-            </Link>
+            </a>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Burger */}
             <button
               onClick={toggleMobileMenu}
-              className="md:hidden p-2 rounded-lg text-foreground hover:bg-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-[#64B557]"
+              className="md:hidden flex flex-col gap-[5px] bg-none bg-transparent border-none cursor-pointer p-2"
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-menu"
               aria-label={isMobileMenuOpen ? t.header.closeMenu : t.header.openMenu}
             >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" aria-hidden="true" />
-              ) : (
-                <Menu className="w-6 h-6" aria-hidden="true" />
-              )}
+              <span
+                className="block w-6 h-[2px] bg-[#091511] rounded-[2px] transition-transform duration-300"
+                style={isMobileMenuOpen ? { transform: "translateY(7px) rotate(45deg)" } : undefined}
+              />
+              <span
+                className="block w-6 h-[2px] bg-[#091511] rounded-[2px] transition-opacity duration-300"
+                style={isMobileMenuOpen ? { opacity: 0 } : undefined}
+              />
+              <span
+                className="block w-6 h-[2px] bg-[#091511] rounded-[2px] transition-transform duration-300"
+                style={isMobileMenuOpen ? { transform: "translateY(-7px) rotate(-45deg)" } : undefined}
+              />
             </button>
           </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      <div
+      <nav
         id="mobile-menu"
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          isMobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`md:hidden flex-col bg-white/[.97] backdrop-blur-[14px] border-t border-[#e2e8f0] px-4 py-4 ${isMobileMenuOpen ? "flex" : "hidden"}`}
+        aria-label="Mobile"
       >
-        <nav
-          className="bg-background/95 backdrop-blur-md border-t border-border px-4 py-4 space-y-1"
-          aria-label="Mobile navigation"
-        >
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={closeMobileMenu}
-              className="block px-4 py-3 text-base font-medium text-foreground hover:bg-secondary rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#64B557]"
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Link
-            href="#contact"
+        {navLinks.map((link) => (
+          <a
+            key={link.href}
+            href={link.href}
             onClick={closeMobileMenu}
-            className="block mx-4 mt-4 text-center rounded-full bg-[#64B557] px-4 py-3 text-base font-medium text-white hover:bg-[#64B557]/90 transition-colors focus:outline-none focus:ring-2 focus:ring-[#64B557] focus:ring-offset-2"
+            className="px-4 py-[.875rem] font-medium rounded-[.75rem] transition-[background,color] duration-200 hover:bg-[#F8F8F8] hover:text-[#64B557]"
           >
-            {t.header.cta}
-          </Link>
-          {/* Mobile Language Toggle */}
-          <button
-            onClick={toggleLanguage}
-            className="flex items-center gap-1 mx-4 mt-2 rounded-full border border-border px-4 py-2 text-sm font-medium transition-colors hover:border-[#64B557] focus:outline-none focus:ring-2 focus:ring-[#64B557]"
-            aria-label="Toggle language"
-          >
-            <span className={lang === "en" ? "text-[#64B557] font-bold" : "text-muted-foreground"}>
-              EN
-            </span>
-            <span className="text-muted-foreground mx-1">|</span>
-            <span className={lang === "cs" ? "text-[#64B557] font-bold" : "text-muted-foreground"}>
-              CS
-            </span>
-          </button>
-        </nav>
-      </div>
+            {link.label}
+          </a>
+        ))}
+        <a
+          href="#contact"
+          onClick={closeMobileMenu}
+          className="mx-2 mt-2 text-center bg-[#64B557] text-white rounded-full py-[.875rem] font-semibold"
+        >
+          {t.header.cta}
+        </a>
+        <button
+          onClick={toggleLanguage}
+          className="flex items-center gap-[.2rem] mx-2 mt-2 rounded-full border-2 border-[rgba(100,181,87,.4)] px-[1.1rem] py-[.6rem] cursor-pointer font-[inherit] transition-[border-color,background] duration-200 hover:border-[#64B557] hover:bg-[rgba(100,181,87,.08)] w-fit"
+          aria-label="Toggle language"
+        >
+          <span className={`text-[.75rem] font-bold leading-none ${lang === "en" ? "text-[#64B557]" : "text-[#4a5568]"}`}>EN</span>
+          <span className="text-[.75rem] text-[rgba(100,181,87,.45)] mx-[.15rem] leading-none">|</span>
+          <span className={`text-[.75rem] font-bold leading-none ${lang === "cs" ? "text-[#64B557]" : "text-[#4a5568]"}`}>CS</span>
+        </button>
+      </nav>
     </header>
   )
 }

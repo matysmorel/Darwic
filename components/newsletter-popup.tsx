@@ -85,12 +85,11 @@ export function NewsletterPopup({ isOpen, onClose }: NewsletterPopupProps) {
   return (
     <dialog
       ref={dialogRef}
-      className="fixed inset-0 z-50 m-auto w-full max-w-2xl bg-transparent p-0 backdrop:bg-black/50 backdrop:backdrop-blur-sm"
+      className="fixed inset-0 z-50 m-auto w-[calc(100%-2rem)] max-w-[28rem] bg-transparent p-0 backdrop:bg-black/50 backdrop:backdrop-blur-sm"
       aria-labelledby="newsletter-title"
       aria-describedby="newsletter-description"
     >
-      <div className="mx-auto max-w-2xl px-4 md:px-8">
-      <div className="relative overflow-hidden rounded-2xl bg-white shadow-2xl">
+      <div className="relative overflow-hidden rounded-[1.25rem] bg-white shadow-[0_30px_70px_rgba(0,0,0,.25)]">
         {/* Gradient accent top */}
         <div 
           className="h-1.5"
@@ -231,7 +230,6 @@ export function NewsletterPopup({ isOpen, onClose }: NewsletterPopupProps) {
             </>
           )}
         </div>
-      </div>
       </div>
     </dialog>
   )

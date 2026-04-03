@@ -17,6 +17,7 @@ export const translations = {
         "We take the reins of evolution where nature stops. A new era of engineered biology begins here.",
       cta: "Partner With Us",
       learnMore: "Learn More",
+      scroll: "Scroll",
     },
     why: {
       eyebrow: "The Why",
@@ -140,7 +141,7 @@ export const translations = {
     footer: {
       navWhy: "Why Darwic",
       navTechnology: "Technology",
-      navMarkets: "Markets",
+      navAbout: "About Us",
       navContact: "Contact",
       rights: "All rights reserved.",
     },
@@ -179,6 +180,7 @@ export const translations = {
         "P\u0159eb\u00edr\u00e1me ot\u011b\u017ee evoluce tam, kde p\u0159\u00edroda p\u0159est\u00e1v\u00e1. Nov\u00e1 \u00e9ra in\u017een\u00fdrsk\u00e9 biologie za\u010d\u00edn\u00e1 zde.",
       cta: "Spolupracujte s n\u00e1mi",
       learnMore: "Zjistit v\u00edce",
+      scroll: "Rolovat",
     },
     why: {
       eyebrow: "Pro\u010d to d\u011bl\u00e1me",
@@ -305,7 +307,7 @@ export const translations = {
     footer: {
       navWhy: "Pro\u010d Darwic",
       navTechnology: "Technologie",
-      navMarkets: "Trhy",
+      navAbout: "O n\u00e1s",
       navContact: "Kontakt",
       rights: "V\u0161echna pr\u00e1va vyhrazena.",
     },

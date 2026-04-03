@@ -3,6 +3,49 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ─── CZECH DIACRITIC FONT OVERRIDE ──────────────────────────────────────────
+   Orbitron lacks Latin Extended-A glyphs (č,š,ž,ř,ě,ů…).
+   We override 'Orbitron' for that unicode range with Exo 2,
+   a geometrically compatible font with full Czech support.
+   The browser uses Exo 2 only for those characters; everything else
+   still comes from the real Orbitron file.
+   ────────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Orbitron';
+  src: url(https://fonts.gstatic.com/s/exo2/v26/7cH1v4okm5zmbvwkAx_sfcEuiD8jvvKcPg.ttf) format('truetype');
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0100-017F;
+}
+@font-face {
+  font-family: 'Orbitron';
+  src: url(https://fonts.gstatic.com/s/exo2/v26/7cH1v4okm5zmbvwkAx_sfcEuiD8jYPWcPg.ttf) format('truetype');
+  font-weight: 600;
+  font-display: swap;
+  unicode-range: U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0100-017F;
+}
+@font-face {
+  font-family: 'Orbitron';
+  src: url(https://fonts.gstatic.com/s/exo2/v26/7cH1v4okm5zmbvwkAx_sfcEuiD8jWfWcPg.ttf) format('truetype');
+  font-weight: 700;
+  font-display: swap;
+  unicode-range: U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0100-017F;
+}
+@font-face {
+  font-family: 'Orbitron';
+  src: url(https://fonts.gstatic.com/s/exo2/v26/7cH1v4okm5zmbvwkAx_sfcEuiD8jPvWcPg.ttf) format('truetype');
+  font-weight: 800;
+  font-display: swap;
+  unicode-range: U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0100-017F;
+}
+@font-face {
+  font-family: 'Orbitron';
+  src: url(https://fonts.gstatic.com/s/exo2/v26/7cH1v4okm5zmbvwkAx_sfcEuiD8jF_WcPg.ttf) format('truetype');
+  font-weight: 900;
+  font-display: swap;
+  unicode-range: U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0100-017F;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #091511;
@@ -37,11 +80,16 @@
   --sidebar-accent-foreground: #091511;
   --sidebar-border: #e2e8f0;
   --sidebar-ring: #64B557;
-  
-  /* Custom Darwic colors */
-  --darwic-green: #64B557;
-  --darwic-dark: #091511;
-  --darwic-light: #F8F8F8;
+
+  /* Darwic design tokens */
+  --green:      #64B557;
+  --green-mid:  #4d9442;
+  --green-dim:  rgba(100,181,87,.12);
+  --dark:       #091511;
+  --dark-2:     #0d1e18;
+  --dark-3:     #1a2f28;
+  --light:      #F8F8F8;
+  --ease-out:   cubic-bezier(.22,1,.36,1);
 }
 
 .dark {
@@ -80,9 +128,9 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-roboto-flex), 'Roboto Flex', sans-serif;
+  --font-sans: var(--font-roboto-flex), 'Roboto Flex', system-ui, -apple-system, sans-serif;
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
-  --font-heading: var(--font-orbitron), 'Orbitron', sans-serif;
+  --font-heading: var(--font-orbitron), 'Orbitron', system-ui, -apple-system, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -127,10 +175,25 @@
   }
   body {
     @apply bg-background text-foreground;
+    line-height: 1.65;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
-/* ─── HERO ANIMATIONS ─────────────────────────────────────────────────────── */
+/* ─── SCROLL REVEAL ──────────────────────────────────────────────────────── */
+.rv   { opacity: 0; transform: translateY(2rem);  transition: opacity .75s var(--ease-out), transform .75s var(--ease-out); }
+.rv-l { opacity: 0; transform: translateX(-2rem); transition: opacity .75s var(--ease-out), transform .75s var(--ease-out); }
+.rv-r { opacity: 0; transform: translateX(2rem);  transition: opacity .75s var(--ease-out), transform .75s var(--ease-out); }
+.rv-s { opacity: 0; transform: scale(.93);        transition: opacity .65s var(--ease-out), transform .65s var(--ease-out); }
+.rv.on, .rv-l.on, .rv-r.on, .rv-s.on { opacity: 1; transform: none; }
+.d1 { transition-delay: .1s; }
+.d2 { transition-delay: .2s; }
+.d3 { transition-delay: .3s; }
+.d4 { transition-delay: .4s; }
+.d5 { transition-delay: .5s; }
+
+/* ─── HERO ANIMATIONS ────────────────────────────────────────────────────── */
 @keyframes hero-float1 {
   0%,100% { transform: translate(0,0) scale(1); }
   40%     { transform: translate(22px,-18px) scale(1.05); }
@@ -161,3 +224,23 @@
   0%,100% { transform: translateY(0px); }
   50%     { transform: translateY(-8px); }
 }
+
+/* ─── SCAN LINE (technology section) ─────────────────────────────────────── */
+@keyframes scanLine {
+  0%   { top: 0;    opacity: 0; }
+  4%   { opacity: 1; }
+  96%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* ─── HERO DNA RESPONSIVE ────────────────────────────────────────────────── */
+.hero-dna {
+  position: absolute;
+  top: 50%;
+  right: 6%;
+  transform: translateY(-50%);
+  animation: hero-bob 7s ease-in-out infinite;
+  will-change: transform;
+}
+@media (max-width: 1100px) { .hero-dna { right: 1%; opacity: .5; } }
+@media (max-width: 768px)  { .hero-dna { display: none; } }

@@ -1,57 +1,43 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
 import { useLanguage } from "@/context/language-context"
 
 export function Footer() {
   const { t } = useLanguage()
 
   return (
-    <footer className="py-12 bg-[#F8F8F8] border-t border-border">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <footer
+      className="border-t border-[#e2e8f0]"
+      style={{ padding: "3rem 0", background: "#F8F8F8" }}
+    >
+      <div className="mx-auto max-w-[1280px] px-6 sm:px-8 lg:px-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <Link href="/" className="flex items-center">
-            <div className="relative h-8 w-[120px]">
+
+          <a href="#home" className="flex-shrink-0">
+            <div className="relative h-[2rem] w-[120px]">
               <Image
                 src="/images/logo-darwic.png"
-                alt="Darwic Logo"
+                alt="Darwic"
                 fill
                 sizes="120px"
                 className="object-contain object-left"
               />
             </div>
-          </Link>
+          </a>
 
-          <nav className="flex items-center gap-8" aria-label="Footer navigation">
-            <Link
-              href="#why"
-              className="text-sm text-muted-foreground hover:text-[#64B557] transition-colors"
-            >
-              {t.footer.navWhy}
-            </Link>
-            <Link
-              href="#technology"
-              className="text-sm text-muted-foreground hover:text-[#64B557] transition-colors"
-            >
-              {t.footer.navTechnology}
-            </Link>
-            <Link
-              href="#markets"
-              className="text-sm text-muted-foreground hover:text-[#64B557] transition-colors"
-            >
-              {t.footer.navMarkets}
-            </Link>
-            <Link
-              href="#contact"
-              className="text-sm text-muted-foreground hover:text-[#64B557] transition-colors"
-            >
-              {t.footer.navContact}
-            </Link>
+          <nav
+            className="flex items-center gap-8 flex-wrap justify-center"
+            aria-label="Footer"
+          >
+            <a href="#why"        className="text-[.875rem] text-[#4a5568] transition-colors duration-200 hover:text-[#64B557]">{t.footer.navWhy}</a>
+            <a href="#technology" className="text-[.875rem] text-[#4a5568] transition-colors duration-200 hover:text-[#64B557]">{t.footer.navTechnology}</a>
+            <a href="#about"      className="text-[.875rem] text-[#4a5568] transition-colors duration-200 hover:text-[#64B557]">{t.footer.navAbout}</a>
+            <a href="#contact"    className="text-[.875rem] text-[#4a5568] transition-colors duration-200 hover:text-[#64B557]">{t.footer.navContact}</a>
           </nav>
 
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Darwic. {t.footer.rights}
+          <p className="text-[.875rem] text-[#4a5568]">
+            © 2025 Darwic. {t.footer.rights}
           </p>
         </div>
       </div>

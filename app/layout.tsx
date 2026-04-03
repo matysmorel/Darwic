@@ -3,14 +3,15 @@ import { Roboto_Flex, Orbitron } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const robotoFlex = Roboto_Flex({ 
-  subsets: ["latin"],
+const robotoFlex = Roboto_Flex({
+  subsets: ["latin", "latin-ext"],
   variable: '--font-roboto-flex',
   display: 'swap',
 });
 
-const orbitron = Orbitron({ 
+const orbitron = Orbitron({
   subsets: ["latin"],
+  weight: ["400", "600", "700", "800", "900"],
   variable: '--font-orbitron',
   display: 'swap',
 });

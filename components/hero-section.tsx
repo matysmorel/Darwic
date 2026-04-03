@@ -82,16 +82,7 @@ export function HeroSection() {
       />
 
       {/* DNA Helix */}
-      <div
-        className="absolute hidden xl:block"
-        aria-hidden="true"
-        style={{
-          right: "6%",
-          top: "50%",
-          transform: "translateY(-50%)",
-          animation: "hero-bob 7s ease-in-out infinite",
-        }}
-      >
+      <div className="hero-dna" aria-hidden="true">
         <svg
           viewBox="0 0 200 460"
           width="200"
@@ -267,7 +258,7 @@ export function HeroSection() {
           className="text-[.65rem] uppercase tracking-[.18em]"
           style={{ color: "rgba(255,255,255,.35)" }}
         >
-          Scroll
+          {t.hero.scroll}
         </span>
         <div
           className="w-5 h-5 border-r-2 border-b-2 rotate-45"
